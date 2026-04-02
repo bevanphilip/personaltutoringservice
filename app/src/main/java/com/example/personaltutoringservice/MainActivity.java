@@ -27,5 +27,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Button Clicked!", Toast.LENGTH_SHORT).show();
         });
 
-    };
-};
+    }
+}
