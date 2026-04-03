@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">PersonalTutoringService</string>
+    <string name="app_name">Personal Tutoring Service</string>
+    <string name="main_title">Personal Tutoring Service</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="forgot_button">Forgot Username/Password</string>
+    <string name="home_page_title">HOME PAGE</string>
+    <string name="register_page_title">REGISTER PAGE</string>
+    <string name="recovery_page_title">Recovery Page</string>
+    <string name="back_to_main">Back to Main Page</string>
 </resources>
