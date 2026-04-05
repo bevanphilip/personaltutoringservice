@@ -12,11 +12,11 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //return to main screen button
-        Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> {
-            finish(); // closes this screen and goes back
-        });
+//        //return to main screen button
+//        Button btnBack = findViewById(R.id.btnBack);
+//        btnBack.setOnClickListener(v -> {
+//            finish(); // closes this screen and goes back
+//        });
 
     }
 }

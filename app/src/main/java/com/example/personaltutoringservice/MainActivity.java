@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etUsername, etPassword, etEmail; //user input for these text fields
+    EditText etEmail, etPassword; //user input for these text fields
     Button btnLogin, btnRegister, btnForgot; //current buttons on homepage
 
     @Override
@@ -19,10 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
-
         btnLogin = findViewById(R.id.btnLogin); //login button
         btnRegister = findViewById(R.id.btnRegister); //register button
         btnForgot = findViewById(R.id.btnForgot); //forgot username or password button
