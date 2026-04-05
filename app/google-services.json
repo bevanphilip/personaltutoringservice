@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "556321419629",
+    "project_id": "personal-tutoring-servic-cfc35",
+    "storage_bucket": "personal-tutoring-servic-cfc35.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556321419629:android:dcb0effa99caba0d3faa64",
+        "android_client_info": {
+          "package_name": "com.example.personaltutoringservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556321419629-8s3bv8bjpn0lel1p0p3scpm08qbqsktq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM1tZVtvTY7isWlKXkVEvxzNrVBsXz1RQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556321419629-8s3bv8bjpn0lel1p0p3scpm08qbqsktq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
