@@ -1,14 +1,16 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    compileSdk 32
+    namespace 'com.example.personaltutoringservice'
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.personaltutoringservice"
-        minSdk 21
-        targetSdk 32
+        minSdk 23
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -35,4 +37,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+    //FireBase Bill of Materials (BoM)
+    implementation platform('com.google.firebase:firebase-bom:34.11.0')
+
+    //FireBase products
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
 }
