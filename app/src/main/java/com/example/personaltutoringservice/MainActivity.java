@@ -1,6 +1,7 @@
 package com.example.personaltutoringservice;
 
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,7 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etEmail, etPassword; //user input for these text fields
+    EditText etUsername, etPassword; //user input for these text fields
     Button btnLogin, btnRegister, btnForgot; //current buttons on homepage
 
     @Override
@@ -20,73 +21,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         etPassword = findViewById(R.id.etPassword);
-        etEmail = findViewById(R.id.etEmail);
+        etUsername = findViewById(R.id.etUsername);
+
         btnLogin = findViewById(R.id.btnLogin); //login button
         btnRegister = findViewById(R.id.btnRegister); //register button
         btnForgot = findViewById(R.id.btnForgot); //forgot username or password button
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
         //LOGIN FUNCTIONS
         btnLogin.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-                //when button is clicked, get what the user type for username and password and returns to a string (trim removes extra spaces at beginning/end)
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
+            String username = etUsername.getText().toString().trim();
+            String pass = etPassword.getText().toString().trim();
+            String errorMessage = "";
 
-                        if(task.isSuccessful()) {
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            if(user.isEmailVerified()) {
-
-                                Toast.makeText(this,"Login Successful",Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(this, MainActivity.class));
-
-                            } else {
-                                Toast.makeText(this,"Please verify your email",Toast.LENGTH_LONG).show();
-                            }
-
-                        } else {
-                            Toast.makeText(this,"Login Failed",Toast.LENGTH_LONG).show();
-                        }
-
-                    });
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent loginIntent = new Intent(MainActivity.this, HomePageActivity.class);
-                startActivity(loginIntent);
-                //if else is used to return errors if user leave fields empty during login attempt, otherwise
-                // login should be successful and take us further into the app
-
+            if (username.isEmpty()) {
+                errorMessage += "Invalid email format\n";
             }
+            if (pass.isEmpty()) {
+                errorMessage += "Password is required\n";
+            }
+            if (!errorMessage.isEmpty()) {
+                showPopup(errorMessage);
+            } else {
+                loginUser(username, pass);
+            }
+
         });
 
         //REGISTER FUNCTIONS
         btnRegister.setOnClickListener(v -> {
-
-//            String email = etEmail.getText().toString();
-//            String password = etPassword.getText().toString();
-//
-//            mAuth.createUserWithEmailAndPassword(email, password)
-//                    .addOnCompleteListener(task -> {
-//
-//                        if(task.isSuccessful()) {
-//
-//                            FirebaseUser user = mAuth.getCurrentUser();
-//                            user.sendEmailVerification();
-//
-//                            Toast.makeText(this,"Verification Email Sent",Toast.LENGTH_LONG).show();
-//                        }
-//                        else {
-//                            Toast.makeText(this,"Registration Failed",Toast.LENGTH_LONG).show();
-//                        }
-//
-//                    });
             Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         });
@@ -98,5 +61,35 @@ public class MainActivity extends AppCompatActivity {
             startActivity(recoveryIntent);
                 //send user to recovery page
         });
+    }
+
+    private void loginUser(String username, String pass) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        mAuth.signInWithEmailAndPassword(username, pass)
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser user = mAuth.getCurrentUser();
+
+                    if (user != null) {
+                        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish();
+                    } else {
+                        // Not verified yet — sign out and warn user
+                        mAuth.signOut();
+                        showPopup("Please verify your email before logging in.\nCheck your inbox for a verification link.");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        showPopup("Login Failed: " + e.getMessage())
+                );
+    }
+
+    private void showPopup(String message) {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Login Error")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
     }
 }
