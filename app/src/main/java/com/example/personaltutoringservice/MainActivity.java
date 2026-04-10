@@ -69,26 +69,26 @@ public class MainActivity extends AppCompatActivity {
         //REGISTER FUNCTIONS
         btnRegister.setOnClickListener(v -> {
 
-            String email = etEmail.getText().toString();
-            String password = etPassword.getText().toString();
-
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-
-                        if(task.isSuccessful()) {
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            user.sendEmailVerification();
-
-                            Toast.makeText(this,"Verification Email Sent",Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            Toast.makeText(this,"Registration Failed",Toast.LENGTH_LONG).show();
-                        }
-
-                    });
-//            Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
-//            startActivity(registerIntent);
+//            String email = etEmail.getText().toString();
+//            String password = etPassword.getText().toString();
+//
+//            mAuth.createUserWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener(task -> {
+//
+//                        if(task.isSuccessful()) {
+//
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            user.sendEmailVerification();
+//
+//                            Toast.makeText(this,"Verification Email Sent",Toast.LENGTH_LONG).show();
+//                        }
+//                        else {
+//                            Toast.makeText(this,"Registration Failed",Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    });
+            Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(registerIntent);
         });
                 //send user to register page
 
