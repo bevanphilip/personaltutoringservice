@@ -10,4 +10,13 @@
     <string name="register_page_title">REGISTER PAGE</string>
     <string name="recovery_page_title">Recovery Page</string>
     <string name="back_to_main">Back to Main Page</string>
+    <string name="personal_tutoring_service">Personal Tutoring Service</string>
+    <string name="create_your_tutor_service_account">Create your Tutor Service account</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="create_account">Create Account</string>
+    <string name="back_to_login">Back to Login</string>
 </resources>
