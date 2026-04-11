@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             String errorMessage = "";
 
             if (username.isEmpty()) {
-                errorMessage += "Invalid email format\n";
+                errorMessage += "Username is required\n";
             }
             if (pass.isEmpty()) {
                 errorMessage += "Password is required\n";
@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(recoveryIntent);
                 //send user to recovery page
         });
+
+        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void loginUser(String username, String pass) {

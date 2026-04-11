@@ -10,4 +10,11 @@
         android:layout_height="wrap_content"
         android:text="@string/home_page_title"
         android:textSize="24sp" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:queryHint="Search tutors..."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
