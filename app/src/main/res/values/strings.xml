@@ -13,6 +13,14 @@
     <string name="find_tutor">Find a Tutor</string>
     <string name="become_tutor">Become a Tutor</string>
     <string name="home">Home</string>
+    <string name="logout">Logout</string>
+    <string name="activateTutorServices">Activate Tutor Services</string>
+    <string name="TutoringRequests">Tutoring Requests</string>
+    <string name="tutorHomeIntro">Manage your tutor profile and student requests.</string>
+    <string name="studentRequest">Student Requests</string>
+    <string name="sessionsInfo">View incoming tutoring requests, session proposals, and scheduled tutoring sessions.</string>
+    <string name="profile">My Profile</string>
+
 
     //register page
     <string name="personal_tutoring_service">Personal Tutoring Service</string>

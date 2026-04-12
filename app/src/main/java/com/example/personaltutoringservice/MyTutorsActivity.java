@@ -16,6 +16,11 @@ public class MyTutorsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("My Tutors");
+        }
+
         setContentView(R.layout.activity_my_tutors);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

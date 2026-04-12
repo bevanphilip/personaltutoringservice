@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SearchTutorsActivity extends AppCompatActivity {
+public class MyTutoringRequestsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +18,10 @@ public class SearchTutorsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Tutor Search Page");
+            getSupportActionBar().setTitle("My Tutoring Requests");
         }
 
-        setContentView(R.layout.activity_search_tutors);
+        setContentView(R.layout.activity_my_tutoring_requests);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -30,7 +30,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
 
         ImageButton homeBtn = findViewById(R.id.btnHome);
         homeBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomePageActivity.class);
+            Intent intent = new Intent(this, TutorHomePageActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });

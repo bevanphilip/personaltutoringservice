@@ -37,9 +37,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent loginIntent = new Intent(MainActivity.this, HomePageActivity.class);
                 startActivity(loginIntent);
                 //if else is used to return errors if user leave fields empty during login attempt, otherwise
-                // login should be successful and take us further into the app
+                // login should be successful and take us further into the app - need to update to actually confirm the username/login are in the database
 
             }
+            //TUTOR TEST
+            if (username.equalsIgnoreCase("Tutor")) {
+                startActivity(new Intent(MainActivity.this, TutorHomePageActivity.class));
+            } else {
+                startActivity(new Intent(MainActivity.this, HomePageActivity.class));
+            }
+
         });
 
         //REGISTER FUNCTIONS
@@ -47,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         });
-                //send user to register page
 
         //FORGOT USERNAME/PASSWORD FUNCTIONS
         btnForgot.setOnClickListener(v -> {

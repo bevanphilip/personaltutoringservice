@@ -9,27 +9,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
+        android:orientation="vertical"
         android:layout_marginBottom="16dp">
 
-        <Button
-            android:id="@+id/buttonFindTutor"
-            android:layout_width="0dp"
+        <!-- Row for Find + Become -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="@string/find_tutor"
-            android:textAllCaps="false" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/buttonFindTutor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="@string/find_tutor"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/buttonBecomeTutor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/become_tutor"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <!-- Logout button BELOW -->
         <Button
-            android:id="@+id/buttonBecomeTutor"
-            android:layout_width="0dp"
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="@string/become_tutor"
-            android:textAllCaps="false" />
+            android:layout_marginTop="12dp"
+            android:text="@string/logout"
+            android:textAllCaps="false"
+            android:backgroundTint="#D32F2F" />
+
     </LinearLayout>
 
     <LinearLayout
