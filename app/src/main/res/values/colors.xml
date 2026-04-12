@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#3949AB</item>
+        <item name="colorPrimaryVariant">#1A237E</item>
+        <item name="colorSecondary">#FF6F00</item>
+    </style>
 </resources>

@@ -12,6 +12,19 @@
     <string name="back_to_main">Back to Main Page</string>
     <string name="find_tutor">Find a Tutor</string>
     <string name="become_tutor">Become a Tutor</string>
+    <string name="home">Home</string>
+
+    //register page
+    <string name="personal_tutoring_service">Personal Tutoring Service</string>
+    <string name="create_your_tutor_service_account">Create your Tutor Service account</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="create_account">Create Account</string>
+    <string name="back_to_login">Back to Login</string>
+
 
     <string name="welcome_username">Welcome, Username</string>
     <string name="home_subtitle">Find tutors, manage your profile, and explore featured help.</string>
