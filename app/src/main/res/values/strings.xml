@@ -10,4 +10,25 @@
     <string name="register_page_title">REGISTER PAGE</string>
     <string name="recovery_page_title">Recovery Page</string>
     <string name="back_to_main">Back to Main Page</string>
+    <string name="find_tutor">Find a Tutor</string>
+    <string name="become_tutor">Become a Tutor</string>
+
+    <string name="welcome_username">Welcome, Username</string>
+    <string name="home_subtitle">Find tutors, manage your profile, and explore featured help.</string>
+
+    <string name="my_profile">My Profile</string>
+    <string name="profile_name">Name: Username</string>
+    <string name="profile_subjects">Subjects: Not set</string>
+    <string name="profile_level">Grade/Level: Not set</string>
+    <string name="profile_suggestion">Completed profiles help us find you the right tutor.</string>
+
+    <string name="featured_tutors">Featured Tutors</string>
+    <string name="tutor1_name">Sarah M. - Math Tutor</string>
+    <string name="tutor1_rating">Rating: 4.9</string>
+    <string name="tutor2_name">Daniel R. - Programming Tutor</string>
+    <string name="tutor2_rating">Rating: 4.8</string>
+
+    <string name="my_tutors">My Tutors</string>
+    <string name="my_tutors_description">View your saved tutors and upcoming sessions.</string>
+
 </resources>
