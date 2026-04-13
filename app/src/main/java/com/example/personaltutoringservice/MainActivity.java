@@ -1,14 +1,12 @@
 package com.example.personaltutoringservice;
 
 import android.os.Bundle;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etPassword = findViewById(R.id.etPassword);
         etUsername = findViewById(R.id.etUsername);
+        etPassword = findViewById(R.id.etPassword);
 
         btnLogin = findViewById(R.id.btnLogin); //login button
         btnRegister = findViewById(R.id.btnRegister); //register button
@@ -29,21 +27,24 @@ public class MainActivity extends AppCompatActivity {
 
         //LOGIN FUNCTIONS
         btnLogin.setOnClickListener(v -> {
-
             String username = etUsername.getText().toString().trim();
-            String pass = etPassword.getText().toString().trim();
-            String errorMessage = "";
+            String password = etPassword.getText().toString().trim();
+                //when button is clicked, get what the user type for username and password and returns to a string (trim removes extra spaces at beginning/end)
 
-            if (username.isEmpty()) {
-                errorMessage += "Invalid email format\n";
-            }
-            if (pass.isEmpty()) {
-                errorMessage += "Password is required\n";
-            }
-            if (!errorMessage.isEmpty()) {
-                showPopup(errorMessage);
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             } else {
-                loginUser(username, pass);
+                Intent loginIntent = new Intent(MainActivity.this, HomePageActivity.class);
+                startActivity(loginIntent);
+                //if else is used to return errors if user leave fields empty during login attempt, otherwise
+                // login should be successful and take us further into the app - need to update to actually confirm the username/login are in the database
+
+            }
+            //TUTOR TEST
+            if (username.equalsIgnoreCase("Tutor")) {
+                startActivity(new Intent(MainActivity.this, TutorHomePageActivity.class));
+            } else {
+                startActivity(new Intent(MainActivity.this, HomePageActivity.class));
             }
 
         });
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         });
-                //send user to register page
 
         //FORGOT USERNAME/PASSWORD FUNCTIONS
         btnForgot.setOnClickListener(v -> {
@@ -61,35 +61,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(recoveryIntent);
                 //send user to recovery page
         });
-    }
-
-    private void loginUser(String username, String pass) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        mAuth.signInWithEmailAndPassword(username, pass)
-                .addOnSuccessListener(authResult -> {
-                    FirebaseUser user = mAuth.getCurrentUser();
-
-                    if (user != null) {
-                        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(this, MainActivity.class));
-                        finish();
-                    } else {
-                        // Not verified yet — sign out and warn user
-                        mAuth.signOut();
-                        showPopup("Please verify your email before logging in.\nCheck your inbox for a verification link.");
-                    }
-                })
-                .addOnFailureListener(e ->
-                        showPopup("Login Failed: " + e.getMessage())
-                );
-    }
-
-    private void showPopup(String message) {
-        new android.app.AlertDialog.Builder(this)
-                .setTitle("Login Error")
-                .setMessage(message)
-                .setPositiveButton("OK", null)
-                .show();
     }
 }
