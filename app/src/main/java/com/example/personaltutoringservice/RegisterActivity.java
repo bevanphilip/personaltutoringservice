@@ -4,30 +4,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Patterns;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity {
 
+public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     EditText username, password, email, phone, address;
     Button btnDone;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //back butoon on top corner
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Register");
+        //back button on top corner
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Register");
+        }
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -37,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnDone = findViewById(R.id.btnDone);
 
         btnDone.setOnClickListener(v -> validateAndRegister());
+        setupBackButton();
     }
 
     private void validateAndRegister() {
@@ -99,43 +105,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveToFirebase(String user, String pass, String mail, String ph, String addr) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        mAuth.createUserWithEmailAndPassword(mail, pass)
-                .addOnSuccessListener(authResult -> {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("username", user);
+        map.put("email", mail);
+        map.put("phone", ph);
+        map.put("address", addr);
 
-                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    if (firebaseUser != null) {
-                        firebaseUser.sendEmailVerification()
-                                .addOnSuccessListener(unused ->
-                                        Toast.makeText(this,
-                                                "Verification email sent to " + mail,
-                                                Toast.LENGTH_LONG).show()
-                                )
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(this,
-                                                "Failed to send verification: " + e.getMessage(),
-                                                Toast.LENGTH_SHORT).show()
-                                );
-                    }
-
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("username", user);
-                    map.put("email", mail);
-                    map.put("phone", ph);
-                    map.put("address", addr);
-
-                    db.collection("Users")
-                            .add(map)
-                            .addOnSuccessListener(documentReference ->
-                                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
-                            )
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                            );
-                })
+        db.collection("Users")
+                .add(map)
+                .addOnSuccessListener(documentReference ->
+                        Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
+                )
                 .addOnFailureListener(e ->
-                        showPopup("Authentication Error: " + e.getMessage())
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
 
@@ -146,10 +129,24 @@ public class RegisterActivity extends AppCompatActivity {
                 .setPositiveButton("OK", null)
                 .show();
     }
-    //return to main screen button
-    private void back(String message) {
 
+    //return to main screen button
+    private void setupBackButton() {
         Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
+
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    public boolean onSupportNavigateUp() {
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }

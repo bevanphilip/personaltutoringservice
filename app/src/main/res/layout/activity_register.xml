@@ -13,12 +13,12 @@
 
         <!-- App Title -->
         <TextView
-            android:layout_width="494dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/personal_tutoring_service"
             android:textColor="#1A237E"
-            android:textSize="40sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
@@ -118,7 +118,7 @@
         <!-- Back Button -->
         <Button
             android:id="@+id/btnBack"
-            android:layout_width="772dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/back_to_login"
             android:textAllCaps="false"
