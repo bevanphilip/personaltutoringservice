@@ -44,14 +44,19 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnSuccessListener(authResult -> {
-                            // Go straight to home page
-                            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        })
-                        .addOnFailureListener(e ->
-                                Toast.makeText(this, "Invalid User", Toast.LENGTH_SHORT).show());
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                // Go to Home Screen
+                                Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(this,
+                                        "Login Failed: " + task.getException().getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
 
 //            db.collection("Students")

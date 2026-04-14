@@ -2,8 +2,10 @@ package com.example.personaltutoringservice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -50,61 +52,72 @@ public class SearchTutorsActivity extends AppCompatActivity {
         // Load all tutors from Firestore
         loadTutors();
 
-        // Search bar — filter as user types
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                filterTutors(query);
-                return true;
-            }
+//        // Search bar — filter as user types
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                filterTutors(query);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                filterTutors(newText);
+//                return true;
+//            }
+//        });
+//    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterTutors(newText);
-                return true;
-            }
-        });
     }
-
     private void loadTutors() {
         db.collection("tutors")
                 .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    allTutors.clear();
-                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
-                        Tutor tutor = new Tutor(
-                                doc.getString("Name"),
-                                doc.getDouble("Price"),
-                                doc.getDouble("Rating"),
-                                doc.getString("Subject")
-                        );
-                        allTutors.add(tutor);
-                    }
-                    // Show all tutors initially
-                    filteredTutors.clear();
-                    filteredTutors.addAll(allTutors);
-                    adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load tutors: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show());
-    }
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-    private void filterTutors(String query) {
-        filteredTutors.clear();
-        if (query.isEmpty()) {
-            // Show all tutors if search is empty
-            filteredTutors.addAll(allTutors);
-        } else {
-            String lower = query.toLowerCase();
-            for (Tutor tutor : allTutors) {
-                // Search by name OR subject/skills
-                if ((tutor.getName() != null && tutor.getName().toLowerCase().contains(lower)) ||
-                        (tutor.getSubject() != null && tutor.getSubject().toLowerCase().contains(lower))) {
-                    filteredTutors.add(tutor);
-                }
-            }
-        }
-        adapter.notifyDataSetChanged();
+                    TextView tvTutors = findViewById(R.id.tvTutors);
+                    StringBuilder data = new StringBuilder();
+
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+
+                        String tutorName = doc.getString("Name");
+                        Double tutorPrice = doc.getDouble("Price");
+                        Double tutorRating = doc.getDouble("Rating");
+                        String tutorSubject = doc.getString("Subject");
+
+                        Log.d("FIRESTORE", "Name: " + tutorName);
+                        Log.d("FIRESTORE", "Price: " + tutorPrice);
+                        Log.d("FIRESTORE", "Rating: " + tutorRating);
+                        Log.d("FIRESTORE", "Subject: " + tutorSubject);
+
+                        data.append(tutorName)
+                                .append(" - ")
+                                .append(tutorSubject)
+                                .append("\n\n");
+
+                        Toast.makeText(this, tutorName + " - " + tutorSubject, Toast.LENGTH_SHORT).show();
+                        tvTutors.setText(data.toString());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FIRESTORE", "Error: " + e.getMessage());
+                });
     }
+//
+//    private void filterTutors(String query) {
+//        filteredTutors.clear();
+//        if (query.isEmpty()) {
+//            // Show all tutors if search is empty
+//            filteredTutors.addAll(allTutors);
+//        } else {
+//            String lower = query.toLowerCase();
+//            for (Tutor tutor : allTutors) {
+//                // Search by name OR subject/skills
+//                if ((tutor.getName() != null && tutor.getName().toLowerCase().contains(lower)) ||
+//                        (tutor.getSubject() != null && tutor.getSubject().toLowerCase().contains(lower))) {
+//                    filteredTutors.add(tutor);
+//                }
+//            }
+//        }
+//        adapter.notifyDataSetChanged();
+//    }
 }

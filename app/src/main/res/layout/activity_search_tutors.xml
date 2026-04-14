@@ -15,13 +15,10 @@
         android:layout_marginBottom="8dp"/>
 
     <TextView
-        android:id="@+id/tvResultCount"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTutors"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Loading tutors..."
-        android:textSize="12sp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginStart="4dp"/>
+        android:text="Tutors will appear here"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
