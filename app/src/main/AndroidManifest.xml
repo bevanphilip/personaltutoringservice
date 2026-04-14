@@ -16,21 +16,6 @@
         android:theme="@style/Theme.PersonalTutoringService"
         tools:targetApi="31">
         <activity
-            android:name=".MyTutoringRequestsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ActivateTutorServicesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TutorHomePageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".BecomeTutorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MyTutorsActivity"
-            android:exported="false" />
-        <activity
             android:name=".SearchTutorsActivity"
             android:exported="false" />
         <activity

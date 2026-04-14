@@ -28,25 +28,12 @@ public class HomePageActivity extends AppCompatActivity {
         welcomeText.setText("Welcome, " + username);
 
         TextView profile = findViewById(R.id.linkMyProfile);
-        TextView featured = findViewById(R.id.linkFeaturedTutors);
-        TextView myTutors = findViewById(R.id.linkMyTutors);
-
         Button findTutor = findViewById(R.id.buttonFindTutor);
-        Button becomeTutor = findViewById(R.id.buttonBecomeTutor);
 
 // Profile page
         profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
-
-// Search tutors page
-        featured.setOnClickListener(v -> startActivity(new Intent(this, SearchTutorsActivity.class)));
-
+// Search tutors
         findTutor.setOnClickListener(v -> startActivity(new Intent(this, SearchTutorsActivity.class)));
-
-// My Tutors page
-        myTutors.setOnClickListener(v -> startActivity(new Intent(this, MyTutorsActivity.class)));
-
-// Become tutor page
-        becomeTutor.setOnClickListener(v -> startActivity(new Intent(this, BecomeTutorActivity.class)));
 
 //Logout - go to the main start page
         Button btnLogout = findViewById(R.id.btnLogout);
