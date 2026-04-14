@@ -58,29 +58,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
             }
-
-//            db.collection("Students")
-//                    .whereEqualTo("email", email)
-//                    .get()
-//                    .addOnSuccessListener(studentSnapshot -> {
-//                        if (!studentSnapshot.isEmpty()) {
-//                            String mail = studentSnapshot.getDocuments().get(0).getString("email");
-//                            firebaseLogin(mail, password);
-//                        } else {
-//                            // Not a student — try Tutors
-//                            db.collection("Tutors")
-//                                    .whereEqualTo("email", email)
-//                                    .get()
-//                                    .addOnSuccessListener(tutorSnapshot -> {
-//                                            String mail = tutorSnapshot.getDocuments().get(0).getString("email");
-//                                            firebaseLogin(mail, password);
-//                                    })
-//                                    .addOnFailureListener(e ->
-//                                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-//                        }
-//                    })
-//                    .addOnFailureListener(e ->
-//                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
         // REGISTER

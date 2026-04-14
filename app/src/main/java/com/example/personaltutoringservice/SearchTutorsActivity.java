@@ -51,23 +51,6 @@ public class SearchTutorsActivity extends AppCompatActivity {
 
         // Load all tutors from Firestore
         loadTutors();
-
-//        // Search bar — filter as user types
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                filterTutors(query);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                filterTutors(newText);
-//                return true;
-//            }
-//        });
-//    }
-
     }
     private void loadTutors() {
         db.collection("tutors")
@@ -102,22 +85,4 @@ public class SearchTutorsActivity extends AppCompatActivity {
                     Log.e("FIRESTORE", "Error: " + e.getMessage());
                 });
     }
-//
-//    private void filterTutors(String query) {
-//        filteredTutors.clear();
-//        if (query.isEmpty()) {
-//            // Show all tutors if search is empty
-//            filteredTutors.addAll(allTutors);
-//        } else {
-//            String lower = query.toLowerCase();
-//            for (Tutor tutor : allTutors) {
-//                // Search by name OR subject/skills
-//                if ((tutor.getName() != null && tutor.getName().toLowerCase().contains(lower)) ||
-//                        (tutor.getSubject() != null && tutor.getSubject().toLowerCase().contains(lower))) {
-//                    filteredTutors.add(tutor);
-//                }
-//            }
-//        }
-//        adapter.notifyDataSetChanged();
-//    }
 }
