@@ -102,7 +102,108 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
+        <!-- student vs Tutor radio config  -->
+        <RadioGroup
+            android:id="@+id/roleGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <RadioButton
+                android:id="@+id/rbStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Student" />
+
+            <RadioButton
+                android:id="@+id/rbTutor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tutor" />
+        </RadioGroup>
+
+        <!-- student role -->
+        <LinearLayout
+            android:id="@+id/studentFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etInterests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:hint="Subject interests (math, science, etc.)"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" />
+        </LinearLayout>
+        <!-- Tutor Role -->
+        <LinearLayout
+            android:id="@+id/tutorFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/etSkills"
+                android:hint="Tutoring Categories (Math, Java, etc.)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text" />
+            <RadioGroup
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/on_campus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="On-Campus" />
+
+                <RadioButton
+                    android:id="@+id/online"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Online" />
+            </RadioGroup>
+            <!--                <EditText-->
+            <!--                    android:id="@+id/etLocation"-->
+            <!--                    android:hint="Location"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:layout_marginTop="12dp"-->
+            <!--                    android:layout_marginBottom="12dp"-->
+            <!--                    android:inputType="text"/>-->
+
+            <EditText
+                android:id="@+id/etHours"
+                android:hint="Available Hours(per week)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/etPrice"
+                android:hint="Price per hour"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
+        </LinearLayout>
         <!-- Done Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDone"
@@ -113,7 +214,7 @@
             android:layout_marginTop="24dp"
             android:padding="12dp"
             app:cornerRadius="12dp"
-            android:backgroundTint="#3949AB"/>
+            android:backgroundTint="@color/purple_700"/>
 
         <!-- Back Button -->
         <Button

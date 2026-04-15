@@ -8,58 +8,102 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText etUsername, etPassword; //user input for these text fields
-    Button btnLogin, btnRegister, btnForgot; //current buttons on homepage
+    EditText etEmail, etPassword;
+    Button btnLogin, btnRegister, btnForgot;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etUsername = findViewById(R.id.etUsername);
+        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
-        btnLogin = findViewById(R.id.btnLogin); //login button
-        btnRegister = findViewById(R.id.btnRegister); //register button
-        btnForgot = findViewById(R.id.btnForgot); //forgot username or password button
+        btnLogin   = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
+        btnForgot  = findViewById(R.id.btnForgot);
 
-        //LOGIN FUNCTIONS
+        // LOGIN
         btnLogin.setOnClickListener(v -> {
-            String username = etUsername.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-                //when button is clicked, get what the user type for username and password and returns to a string (trim removes extra spaces at beginning/end)
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent loginIntent = new Intent(MainActivity.this, HomePageActivity.class);
-                startActivity(loginIntent);
-                //if else is used to return errors if user leave fields empty during login attempt, otherwise
-                // login should be successful and take us further into the app - need to update to actually confirm the username/login are in the database
-
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             }
-            //TUTOR TEST
-            if (username.equalsIgnoreCase("Tutor")) {
-                startActivity(new Intent(MainActivity.this, TutorHomePageActivity.class));
-            } else {
-                startActivity(new Intent(MainActivity.this, HomePageActivity.class));
+            else {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                // Go to Home Screen
+                                Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(this,
+                                        "Login Failed: " + task.getException().getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
 
+//            db.collection("Students")
+//                    .whereEqualTo("email", email)
+//                    .get()
+//                    .addOnSuccessListener(studentSnapshot -> {
+//                        if (!studentSnapshot.isEmpty()) {
+//                            String mail = studentSnapshot.getDocuments().get(0).getString("email");
+//                            firebaseLogin(mail, password);
+//                        } else {
+//                            // Not a student — try Tutors
+//                            db.collection("Tutors")
+//                                    .whereEqualTo("email", email)
+//                                    .get()
+//                                    .addOnSuccessListener(tutorSnapshot -> {
+//                                            String mail = tutorSnapshot.getDocuments().get(0).getString("email");
+//                                            firebaseLogin(mail, password);
+//                                    })
+//                                    .addOnFailureListener(e ->
+//                                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//                        }
+//                    })
+//                    .addOnFailureListener(e ->
+//                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
-        //REGISTER FUNCTIONS
+        // REGISTER
         btnRegister.setOnClickListener(v -> {
-            Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
-            startActivity(registerIntent);
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         });
 
-        //FORGOT USERNAME/PASSWORD FUNCTIONS
+        // FORGOT USERNAME/PASSWORD
         btnForgot.setOnClickListener(v -> {
-            Intent recoveryIntent = new Intent(MainActivity.this, RecoveryActivity.class);
-            startActivity(recoveryIntent);
-                //send user to recovery page
+            startActivity(new Intent(MainActivity.this, RecoveryActivity.class));
         });
     }
+
+    private void firebaseLogin(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+                    // Go straight to home page
+                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show());
+    }
+
 }
