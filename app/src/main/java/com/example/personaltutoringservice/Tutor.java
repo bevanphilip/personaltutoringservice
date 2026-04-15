@@ -6,7 +6,6 @@ public class Tutor {
     private Double Rating;
     private String Subject;
 
-    // Required empty constructor for Firestore
     public Tutor() {}
 
     public Tutor(String name, Double price, Double rating,

@@ -5,15 +5,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,18 +63,6 @@ public class MainActivity extends AppCompatActivity {
         btnForgot.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, RecoveryActivity.class));
         });
-    }
-
-    private void firebaseLogin(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    // Go straight to home page
-                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show());
     }
 
 }

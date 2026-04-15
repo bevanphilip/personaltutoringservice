@@ -29,7 +29,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
         Tutor tutor = tutorList.get(position);
         holder.tvName.setText("Name: "     + tutor.getName());
         holder.tvSubject.setText("Subjects: " + tutor.getSubject());
-        holder.tvRating.setText("Location: " + tutor.getRating());
+        holder.tvRating.setText("Rating: " + tutor.getRating());
         holder.tvPrice.setText("Price: $"  + tutor.getPrice() + "/hr");
     }
 
@@ -37,7 +37,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
     public int getItemCount() { return tutorList.size(); }
 
     public static class TutorViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvSubject, tvRating, tvHours, tvPrice;
+        TextView tvName, tvSubject, tvRating, tvPrice;
 
         public TutorViewHolder(@NonNull View itemView) {
             super(itemView);
