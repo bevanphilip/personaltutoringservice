@@ -1,95 +1,86 @@
 package com.example.personaltutoringservice;
 
 import android.os.Bundle;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etUsername, etPassword; //user input for these text fields
-    Button btnLogin, btnRegister, btnForgot; //current buttons on homepage
+    EditText etEmail, etPassword;
+    Button btnLogin, btnRegister, btnForgot;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        etUsername = findViewById(R.id.etUsername);
 
-        btnLogin = findViewById(R.id.btnLogin); //login button
-        btnRegister = findViewById(R.id.btnRegister); //register button
-        btnForgot = findViewById(R.id.btnForgot); //forgot username or password button
+        btnLogin   = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
+        btnForgot  = findViewById(R.id.btnForgot);
 
-        //LOGIN FUNCTIONS
+        // LOGIN
         btnLogin.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-            String username = etUsername.getText().toString().trim();
-            String pass = etPassword.getText().toString().trim();
-            String errorMessage = "";
-
-            if (username.isEmpty()) {
-                errorMessage += "Invalid email format\n";
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             }
-            if (pass.isEmpty()) {
-                errorMessage += "Password is required\n";
+            else {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                // Go to Home Screen
+                                Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(this,
+                                        "Login Failed: " + task.getException().getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
-            if (!errorMessage.isEmpty()) {
-                showPopup(errorMessage);
-            } else {
-                loginUser(username, pass);
-            }
-
         });
 
-        //REGISTER FUNCTIONS
+        // REGISTER
         btnRegister.setOnClickListener(v -> {
-            Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
-            startActivity(registerIntent);
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         });
-                //send user to register page
 
-        //FORGOT USERNAME/PASSWORD FUNCTIONS
+        // FORGOT USERNAME/PASSWORD
         btnForgot.setOnClickListener(v -> {
-            Intent recoveryIntent = new Intent(MainActivity.this, RecoveryActivity.class);
-            startActivity(recoveryIntent);
-                //send user to recovery page
+            startActivity(new Intent(MainActivity.this, RecoveryActivity.class));
         });
     }
 
-    private void loginUser(String username, String pass) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        mAuth.signInWithEmailAndPassword(username, pass)
+    private void firebaseLogin(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    FirebaseUser user = mAuth.getCurrentUser();
-
-                    if (user != null) {
-                        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(this, MainActivity.class));
-                        finish();
-                    } else {
-                        // Not verified yet — sign out and warn user
-                        mAuth.signOut();
-                        showPopup("Please verify your email before logging in.\nCheck your inbox for a verification link.");
-                    }
+                    // Go straight to home page
+                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                    startActivity(intent);
+                    finish();
                 })
                 .addOnFailureListener(e ->
-                        showPopup("Login Failed: " + e.getMessage())
-                );
+                        Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show());
     }
 
-    private void showPopup(String message) {
-        new android.app.AlertDialog.Builder(this)
-                .setTitle("Login Error")
-                .setMessage(message)
-                .setPositiveButton("OK", null)
-                .show();
-    }
 }
