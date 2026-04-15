@@ -67,17 +67,15 @@ public class SearchTutorsActivity extends AppCompatActivity {
                         Double tutorRating = doc.getDouble("Rating");
                         String tutorSubject = doc.getString("Subject");
 
-                        Log.d("FIRESTORE", "Name: " + tutorName);
-                        Log.d("FIRESTORE", "Price: " + tutorPrice);
-                        Log.d("FIRESTORE", "Rating: " + tutorRating);
-                        Log.d("FIRESTORE", "Subject: " + tutorSubject);
-
                         data.append(tutorName)
+                                .append(" - $")
+                                .append(tutorPrice)
+                                .append(" - *")
+                                .append(tutorRating)
                                 .append(" - ")
                                 .append(tutorSubject)
                                 .append("\n\n");
 
-                        Toast.makeText(this, tutorName + " - " + tutorSubject, Toast.LENGTH_SHORT).show();
                         tvTutors.setText(data.toString());
                     }
                 })
