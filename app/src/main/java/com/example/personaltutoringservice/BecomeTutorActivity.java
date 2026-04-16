@@ -17,11 +17,13 @@ public class BecomeTutorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        setContentView(R.layout.activity_become_tutor);
+
+        // Set title AFTER setContentView (cleaner order)
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Become a Tutor");
         }
 
-        setContentView(R.layout.activity_become_tutor);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -34,7 +36,5 @@ public class BecomeTutorActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
-
-
     }
 }

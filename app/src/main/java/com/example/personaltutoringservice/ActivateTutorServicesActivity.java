@@ -17,11 +17,13 @@ public class ActivateTutorServicesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        setContentView(R.layout.activity_activate_tutor_services);
+
+        // Set title AFTER setContentView (cleaner order)
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Activate Tutor Services");
         }
 
-        setContentView(R.layout.activity_activate_tutor_services);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

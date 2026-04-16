@@ -2,22 +2,19 @@ package com.example.personaltutoringservice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Patterns;
-import android.view.View;
-import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
-
 public class RegisterActivity extends AppCompatActivity {
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText username, password, email, phone, address;
@@ -28,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //back button on top corner
+        // Back button on top corner
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Register");
@@ -46,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void validateAndRegister() {
-
         String user = username.getText().toString().trim();
         String pass = password.getText().toString().trim();
         String mail = email.getText().toString().trim();
@@ -93,19 +89,24 @@ public class RegisterActivity extends AppCompatActivity {
         boolean hasUpper = false, hasLower = false, hasSpecial = false;
 
         for (char c : password.toCharArray()) {
-            if (Character.isUpperCase(c)) hasUpper = true;
-            else if (Character.isLowerCase(c)) hasLower = true;
-            else if (!Character.isLetterOrDigit(c)) hasSpecial = true;
+            if (Character.isUpperCase(c)) {
+                hasUpper = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLower = true;
+            } else if (!Character.isLetterOrDigit(c)) {
+                hasSpecial = true;
+            }
 
             // Disallowed characters
-            if (c == '-' || c == ',' || c == '>' || c == '<') return false;
+            if (c == '-' || c == ',' || c == '>' || c == '<') {
+                return false;
+            }
         }
 
         return hasUpper && hasLower && hasSpecial;
     }
 
     private void saveToFirebase(String user, String pass, String mail, String ph, String addr) {
-
         HashMap<String, Object> map = new HashMap<>();
         map.put("username", user);
         map.put("email", mail);
@@ -114,9 +115,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         db.collection("Users")
                 .add(map)
-                .addOnSuccessListener(documentReference ->
-                        Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
-                )
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    finish();
+                })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
@@ -130,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .show();
     }
 
-    //return to main screen button
+    // Return to main screen button
     private void setupBackButton() {
         Button btnBack = findViewById(R.id.btnBack);
 
@@ -142,6 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    @Override
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

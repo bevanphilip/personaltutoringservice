@@ -8,6 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="subject_math">#6A1B9A</color>
+    <color name="subject_science">#1565C0</color>
+    <color name="subject_programming">#2E7D32</color>
+    <color name="subject_default">#455A64</color>
+
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#3949AB</item>
         <item name="colorPrimaryVariant">#1A237E</item>

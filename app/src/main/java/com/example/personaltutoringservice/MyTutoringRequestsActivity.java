@@ -17,11 +17,12 @@ public class MyTutoringRequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
+        setContentView(R.layout.activity_my_tutoring_requests);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("My Tutoring Requests");
         }
 
-        setContentView(R.layout.activity_my_tutoring_requests);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
