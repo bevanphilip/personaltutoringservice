@@ -52,7 +52,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
         });
     }
     private void loadTutors() {
-        db.collection("tutors")
+        db.collection("Tutors")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
@@ -61,16 +61,16 @@ public class SearchTutorsActivity extends AppCompatActivity {
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
 
-                        String name = doc.getString("Name");
-                        String subject = doc.getString("Subject");
-                        Double price = doc.getDouble("Price");
-                        Double rating = doc.getDouble("Rating");
+                        String name = doc.getString("username");
+                        String subject = doc.getString("skills");
+                        String price = doc.getString("price");
+                        String location = doc.getString("location");
 
                         Tutor tutor = new Tutor(
                                 name,
-                                price != null ? price : 0,
-                                rating != null ? rating : 0,
-                                subject
+                                subject,
+                                price,
+                                location
                         );
 
                         allTutors.add(tutor);

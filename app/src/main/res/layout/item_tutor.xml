@@ -30,18 +30,18 @@
             android:layout_marginBottom="2dp"/>
 
         <TextView
-            android:id="@+id/tvTutorRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:layout_marginBottom="2dp"/>
-
-        <TextView
             android:id="@+id/tvTutorPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="#4CAF50"/>
+
+        <TextView
+            android:id="@+id/tvTutorLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_marginBottom="2dp"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

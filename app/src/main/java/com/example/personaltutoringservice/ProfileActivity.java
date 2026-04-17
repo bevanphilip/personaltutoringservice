@@ -30,7 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         ImageButton homeBtn = findViewById(R.id.btnHome);
         homeBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomePageActivity.class);
+            Intent intent = new Intent(this, StudentHomePageActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
