@@ -16,6 +16,12 @@
         android:theme="@style/Theme.PersonalTutoringService"
         tools:targetApi="31">
         <activity
+            android:name=".BookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TutorSearchDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdvertiseServicesActivity"
             android:exported="false" />
         <activity
