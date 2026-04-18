@@ -26,15 +26,6 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/find_tutor"
                 android:textAllCaps="false" />
-
-            <Button
-                android:id="@+id/buttonBecomeTutor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="@string/become_tutor"
-                android:textAllCaps="false" />
         </LinearLayout>
 
         <!-- Logout button BELOW -->

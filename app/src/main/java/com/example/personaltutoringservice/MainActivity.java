@@ -5,15 +5,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,51 +30,45 @@ public class MainActivity extends AppCompatActivity {
 
         // LOGIN
         btnLogin.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
+            String username = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                // Go to Home Screen
-                                Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(this,
-                                        "Login Failed: " + task.getException().getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
+                return;
             }
 
-//            db.collection("Students")
-//                    .whereEqualTo("email", email)
-//                    .get()
-//                    .addOnSuccessListener(studentSnapshot -> {
-//                        if (!studentSnapshot.isEmpty()) {
-//                            String mail = studentSnapshot.getDocuments().get(0).getString("email");
-//                            firebaseLogin(mail, password);
-//                        } else {
-//                            // Not a student — try Tutors
-//                            db.collection("Tutors")
-//                                    .whereEqualTo("email", email)
-//                                    .get()
-//                                    .addOnSuccessListener(tutorSnapshot -> {
-//                                            String mail = tutorSnapshot.getDocuments().get(0).getString("email");
-//                                            firebaseLogin(mail, password);
-//                                    })
-//                                    .addOnFailureListener(e ->
-//                                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-//                        }
-//                    })
-//                    .addOnFailureListener(e ->
-//                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            db.collection("Students")
+                    .whereEqualTo("username", username.toLowerCase())
+                    .get()
+                    .addOnSuccessListener(studentSnapshot -> {
+
+                        if (!studentSnapshot.isEmpty()) {
+                            String email = studentSnapshot.getDocuments().get(0).getString("email");
+                            loginWithEmail(email, password);
+                        } else {
+                            db.collection("Tutors")
+                                    .whereEqualTo("username", username.toLowerCase())
+                                    .get()
+                                    .addOnSuccessListener(tutorSnapshot -> {
+
+                                        if (!tutorSnapshot.isEmpty()) {
+                                            String email = tutorSnapshot.getDocuments().get(0).getString("email");
+                                            loginWithEmail(email, password);
+                                        } else {
+                                            Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    })
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                    );
+                        }
+
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
         });
 
         // REGISTER
@@ -94,16 +82,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void firebaseLogin(String email, String password) {
+    private void loginWithEmail(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    // Go straight to home page
-                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(MainActivity.this, StudentHomePageActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+                        Toast.makeText(this,
+                                "Login Failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
 }

@@ -2,23 +2,21 @@ package com.example.personaltutoringservice;
 
 public class Tutor {
     private String Name;
-    private Double Price;
-    private Double Rating;
     private String Subject;
+    private String Price;
+    private String Location;
 
-    // Required empty constructor for Firestore
     public Tutor() {}
 
-    public Tutor(String name, Double price, Double rating,
-                 String subject) {
+    public Tutor(String name, String subject, String price, String location) {
         this.Name = name;
-        this.Price = price;
-        this.Rating = rating;
         this.Subject = subject;
+        this.Price = price;
+        this.Location = location;
     }
 
     public String getName() { return Name; }
-    public Double getPrice()   { return Price; }
-    public Double getRating() { return Rating; }
     public String getSubject()    { return Subject; }
+    public String getPrice()   { return Price; }
+    public String getLocation() { return Location; }
 }
