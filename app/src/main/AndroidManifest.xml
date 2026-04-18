@@ -19,9 +19,6 @@
             android:name=".SearchTutorsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".RecoveryActivity"
             android:exported="false" />
         <activity

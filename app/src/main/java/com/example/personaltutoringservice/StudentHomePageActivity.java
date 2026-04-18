@@ -29,6 +29,10 @@ public class StudentHomePageActivity extends AppCompatActivity {
         TextView welcomeText = findViewById(R.id.textWelcome);
         TextView profileNameText = findViewById(R.id.textProfileName);
         TextView interestsText = findViewById(R.id.textInterests);
+        TextView tutor1Name = findViewById(R.id.textTutor1Name);
+        TextView tutor1Rating = findViewById(R.id.textTutor1Rating);
+        TextView tutor2Name = findViewById(R.id.textTutor2Name);
+        TextView tutor2Rating = findViewById(R.id.textTutor2Rating);
 
         String name = getIntent().getStringExtra("username");
         if (name != null) {
@@ -66,11 +70,39 @@ public class StudentHomePageActivity extends AppCompatActivity {
                     );
         }
 
-        TextView profile = findViewById(R.id.linkMyProfile);
+        db.collection("Tutors")
+                .orderBy("rating", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .limit(2) // get top 2 tutors
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    int index = 0;
+
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        String tutorName = doc.getString("name");
+                        String subject = doc.getString("subject");
+                        Double rating = doc.getDouble("rating");
+
+                        if (tutorName != null && rating != null) {
+
+                            if (index == 0) {
+                                tutor1Name.setText(tutorName + " (" + subject + ")");
+                                tutor1Rating.setText("Rating: " + String.format("%.1f", rating));
+                            } else if (index == 1) {
+                                tutor2Name.setText(tutorName + " (" + subject + ")");
+                                tutor2Rating.setText("Rating: " + String.format("%.1f", rating));
+                            }
+
+                            index++;
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    tutor1Name.setText("Error loading tutors");
+                });
+
         Button findTutor = findViewById(R.id.buttonFindTutor);
 
-        // Profile page
-        profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
         // Search tutors
         findTutor.setOnClickListener(v -> startActivity(new Intent(this, SearchTutorsActivity.class)));
 
