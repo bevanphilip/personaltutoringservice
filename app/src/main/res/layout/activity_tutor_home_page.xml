@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Find tutors, manage your profile, and explore featured help."
+            android:text="Manage your profile, sessions, and advertise your tutoring services."
             android:textSize="14sp"
             android:textColor="#777777"
             android:layout_marginBottom="20dp" />
@@ -61,10 +61,10 @@
                 android:layout_marginBottom="4dp" />
 
             <TextView
-                android:id="@+id/tvQuickInterests"
+                android:id="@+id/tvQuickSkills"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Interests: Not set"
+                android:text="Skills: Not set"
                 android:textSize="16sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="8dp" />
@@ -72,101 +72,47 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complete your profile to help us find the right tutor."
+                android:text="Keep your profile updated so students can find you faster."
                 android:textSize="13sp"
                 android:textColor="#777777" />
         </LinearLayout>
 
-        <!-- Featured Tutors -->
+        <!-- My Sessions -->
         <TextView
+            android:id="@+id/linkMySessions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Featured Tutors"
+            android:text="My Sessions"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#0000EE"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#EAEAEA"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sarah M. - Math Tutor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#666666" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating: 4.9"
-                android:textSize="14sp"
-                android:textColor="#777777" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#EAEAEA"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daniel R. - Programming Tutor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#666666" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating: 4.8"
-                android:textSize="14sp"
-                android:textColor="#777777" />
-        </LinearLayout>
-
-        <!-- My Tutors -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Tutors"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#0000EE"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View your saved tutors and upcoming sessions."
+            android:text="View your tutoring sessions and schedule."
             android:textSize="14sp"
             android:textColor="#777777"
-            android:layout_marginBottom="28dp" />
+            android:layout_marginBottom="20dp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="120dp" />
-
+        <!-- Advertise -->
         <Button
-            android:id="@+id/buttonFindTutor"
+            android:id="@+id/buttonAdvertiseServices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Find a Tutor"
+            android:text="Advertise My Services"
             android:textAllCaps="false"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textColor="#FFFFFF"
             android:backgroundTint="#6A00F4"
             android:layout_marginBottom="20dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="220dp" />
 
         <Button
             android:id="@+id/btnLogout"

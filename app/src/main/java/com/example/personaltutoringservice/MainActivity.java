@@ -1,11 +1,13 @@
 package com.example.personaltutoringservice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -13,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etEmail, etPassword;
     Button btnLogin, btnRegister, btnForgot;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -24,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
-        btnLogin   = findViewById(R.id.btnLogin);
+        btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
-        btnForgot  = findViewById(R.id.btnForgot);
+        btnForgot = findViewById(R.id.btnForgot);
 
         // LOGIN
         btnLogin.setOnClickListener(v -> {
@@ -39,22 +42,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             db.collection("Students")
-                    .whereEqualTo("username", username.toLowerCase())
+                    //.whereEqualTo("username", username.toLowerCase()) - Tutor kept giving Username not found think LowerCase had to do with it.
+                    .whereEqualTo("username", username)
                     .get()
                     .addOnSuccessListener(studentSnapshot -> {
 
                         if (!studentSnapshot.isEmpty()) {
                             String email = studentSnapshot.getDocuments().get(0).getString("email");
-                            loginWithEmail(email, password);
+                            loginWithEmail(email, password, "student");
                         } else {
                             db.collection("Tutors")
-                                    .whereEqualTo("username", username.toLowerCase())
+                                    //.whereEqualTo("username", username.toLowerCase())
+                                    .whereEqualTo("username", username)
                                     .get()
                                     .addOnSuccessListener(tutorSnapshot -> {
 
                                         if (!tutorSnapshot.isEmpty()) {
                                             String email = tutorSnapshot.getDocuments().get(0).getString("email");
-                                            loginWithEmail(email, password);
+                                            loginWithEmail(email, password, "tutor");
                                         } else {
                                             Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show();
                                         }
@@ -82,22 +87,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loginWithEmail(String email, String password) {
+    private void loginWithEmail(String email, String password, String userType) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(MainActivity.this, StudentHomePageActivity.class);
+                        Intent intent;
+                        if (userType.equals("tutor")) {
+                            intent = new Intent(MainActivity.this, TutorHomePageActivity.class);
+                        } else {
+                            intent = new Intent(MainActivity.this, StudentHomePageActivity.class);
+                        }
+
                         startActivity(intent);
                         finish();
 
                     } else {
-                        Toast.makeText(this,
+                        Toast.makeText(
+                                this,
                                 "Login Failed: " + task.getException().getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
     }
-
 }
