@@ -8,6 +8,11 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 public class StudentHomePageActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
@@ -22,9 +27,44 @@ public class StudentHomePageActivity extends AppCompatActivity {
 
         // update the username
         TextView welcomeText = findViewById(R.id.textWelcome);
+        TextView profileNameText = findViewById(R.id.textProfileName);
+        TextView interestsText = findViewById(R.id.textInterests);
 
-        String username = "User";
-        welcomeText.setText("Welcome, " + username);
+        String name = getIntent().getStringExtra("username");
+        if (name != null) {
+            welcomeText.setText("Welcome, " + name.toUpperCase());
+        }
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            String uid = user.getUid();
+
+            db.collection("Students").document(uid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+
+                        if (documentSnapshot.exists()) {
+
+                            String profileName = documentSnapshot.getString("username");
+                            String interests = documentSnapshot.getString("interests");
+
+                            if (profileName != null) {
+                                profileNameText.setText("Name: " + profileName);
+                            }
+
+                            if (interests != null) {
+                                interestsText.setText("Interests: " + interests.toLowerCase());
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e ->
+                            welcomeText.setText("Error loading profile")
+                    );
+        }
 
         TextView profile = findViewById(R.id.linkMyProfile);
         Button findTutor = findViewById(R.id.buttonFindTutor);

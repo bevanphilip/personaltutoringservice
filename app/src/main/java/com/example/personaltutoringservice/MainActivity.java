@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (!studentSnapshot.isEmpty()) {
                             String email = studentSnapshot.getDocuments().get(0).getString("email");
-                            loginWithEmail(email, password);
+                            loginWithEmail(email, password, username);
                         } else {
                             db.collection("Tutors")
                                     .whereEqualTo("username", username.toLowerCase())
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         if (!tutorSnapshot.isEmpty()) {
                                             String email = tutorSnapshot.getDocuments().get(0).getString("email");
-                                            loginWithEmail(email, password);
+                                            loginWithEmail(email, password, username);
                                         } else {
                                             Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show();
                                         }
@@ -82,13 +82,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loginWithEmail(String email, String password) {
+    private void loginWithEmail(String email, String password, String username) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(MainActivity.this, StudentHomePageActivity.class);
+                        intent.putExtra("username", username);
                         startActivity(intent);
                         finish();
 

@@ -93,26 +93,12 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/textProfileSubjects"
+                android:id="@+id/textInterests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_subjects"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/textProfileLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:text="@string/profile_level"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/textProfileSuggestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_suggestion"
-                android:textSize="11sp" />
+                android:text="Interests:"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
         <TextView
@@ -195,8 +181,6 @@
             android:layout_height="wrap_content"
             android:text="@string/my_tutors_description"
             android:textSize="11sp" />
-
-
 
     </LinearLayout>
 
