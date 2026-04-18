@@ -38,18 +38,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // STEP 1: Check Students collection
             db.collection("Students")
                     .whereEqualTo("username", username.toLowerCase())
                     .get()
                     .addOnSuccessListener(studentSnapshot -> {
 
                         if (!studentSnapshot.isEmpty()) {
-                            // Found in Students
                             String email = studentSnapshot.getDocuments().get(0).getString("email");
                             loginWithEmail(email, password);
                         } else {
-                            // STEP 2: Check Tutors collection
                             db.collection("Tutors")
                                     .whereEqualTo("username", username.toLowerCase())
                                     .get()
