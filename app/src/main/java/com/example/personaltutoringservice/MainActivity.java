@@ -30,28 +30,45 @@ public class MainActivity extends AppCompatActivity {
 
         // LOGIN
         btnLogin.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
+            String username = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
+                return;
             }
-            else {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                // Go to Home Screen
-                                Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(this,
-                                        "Login Failed: " + task.getException().getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
-            }
+
+            db.collection("Students")
+                    .whereEqualTo("username", username.toLowerCase())
+                    .get()
+                    .addOnSuccessListener(studentSnapshot -> {
+
+                        if (!studentSnapshot.isEmpty()) {
+                            String email = studentSnapshot.getDocuments().get(0).getString("email");
+                            loginWithEmail(email, password);
+                        } else {
+                            db.collection("Tutors")
+                                    .whereEqualTo("username", username.toLowerCase())
+                                    .get()
+                                    .addOnSuccessListener(tutorSnapshot -> {
+
+                                        if (!tutorSnapshot.isEmpty()) {
+                                            String email = tutorSnapshot.getDocuments().get(0).getString("email");
+                                            loginWithEmail(email, password);
+                                        } else {
+                                            Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    })
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                    );
+                        }
+
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
         });
 
         // REGISTER
@@ -63,6 +80,24 @@ public class MainActivity extends AppCompatActivity {
         btnForgot.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, RecoveryActivity.class));
         });
+    }
+
+    private void loginWithEmail(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(MainActivity.this, StudentHomePageActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+                        Toast.makeText(this,
+                                "Login Failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
 }

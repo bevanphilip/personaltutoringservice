@@ -28,23 +28,23 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
     public void onBindViewHolder(@NonNull TutorViewHolder holder, int position) {
         Tutor tutor = tutorList.get(position);
         holder.tvName.setText("Name: "     + tutor.getName());
-        holder.tvSubject.setText("Subjects: " + tutor.getSubject());
-        holder.tvRating.setText("Rating: " + tutor.getRating());
+        holder.tvSubject.setText("Subject: " + tutor.getSubject());
         holder.tvPrice.setText("Price: $"  + tutor.getPrice() + "/hr");
+        holder.tvLocation.setText("Location: " + tutor.getLocation());
     }
 
     @Override
     public int getItemCount() { return tutorList.size(); }
 
     public static class TutorViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvSubject, tvRating, tvPrice;
+        TextView tvName, tvSubject, tvLocation, tvPrice;
 
         public TutorViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName     = itemView.findViewById(R.id.tvTutorName);
             tvSubject   = itemView.findViewById(R.id.tvTutorSubject);
-            tvRating = itemView.findViewById(R.id.tvTutorRating);
             tvPrice    = itemView.findViewById(R.id.tvTutorPrice);
+            tvLocation = itemView.findViewById(R.id.tvTutorLocation);
         }
     }
 }

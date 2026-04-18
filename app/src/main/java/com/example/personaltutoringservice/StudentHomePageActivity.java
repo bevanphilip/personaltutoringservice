@@ -8,13 +8,13 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class HomePageActivity extends AppCompatActivity {
+public class StudentHomePageActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
+        setContentView(R.layout.activity_student_home_page);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Student Home");
@@ -41,7 +41,7 @@ public class HomePageActivity extends AppCompatActivity {
                     .setTitle("Logout")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        Intent intent = new Intent(HomePageActivity.this, MainActivity.class);
+                        Intent intent = new Intent(StudentHomePageActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();

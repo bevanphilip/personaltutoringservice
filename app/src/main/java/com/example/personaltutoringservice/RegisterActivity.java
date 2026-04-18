@@ -191,6 +191,7 @@ public class RegisterActivity extends AppCompatActivity
         Map<String, Object> centralUser = new HashMap<>();
         centralUser.put("email", mail);
         centralUser.put("role", userData.get("role"));
+        centralUser.put("username", user.toLowerCase());
         db.collection("Users").document(uid).set(centralUser);
     }
 
