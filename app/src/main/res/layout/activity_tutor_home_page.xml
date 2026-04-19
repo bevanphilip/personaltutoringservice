@@ -112,19 +112,19 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-        <!-- Advertise -->
-        <Button
-            android:id="@+id/buttonAdvertiseServices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Advertise My Services"
-            android:textAllCaps="false"
-            android:textSize="22sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#6A00F4"
-            android:layout_marginBottom="20dp" />
+<!--        &lt;!&ndash; Advertise &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/buttonAdvertiseServices"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Advertise My Services"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textSize="22sp"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:backgroundTint="#6A00F4"-->
+<!--            android:layout_marginBottom="20dp" />-->
 
-
+        <!-- Logout -->
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"

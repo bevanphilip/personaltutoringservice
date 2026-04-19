@@ -44,7 +44,7 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         TextView profile = findViewById(R.id.linkMyProfile);
         TextView sessions = findViewById(R.id.linkSessions);
-        Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
+        //Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
         Button btnLogout = findViewById(R.id.btnLogout);
 
         welcomeText.setText("Welcome, User");
@@ -71,9 +71,9 @@ public class TutorHomePageActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        advertiseBtn.setOnClickListener(v ->
-                startActivity(new Intent(TutorHomePageActivity.this, AdvertiseServicesActivity.class))
-        );
+//        advertiseBtn.setOnClickListener(v ->
+//                startActivity(new Intent(TutorHomePageActivity.this, AdvertiseServicesActivity.class))
+//        );
 
         btnLogout.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
