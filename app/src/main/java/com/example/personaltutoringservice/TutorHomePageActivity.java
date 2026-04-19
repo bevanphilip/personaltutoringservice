@@ -36,13 +36,14 @@ public class TutorHomePageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUser = mAuth.getCurrentUser();
+        String tutorId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         welcomeText = findViewById(R.id.textWelcome);
         tvQuickName = findViewById(R.id.tvQuickName);
         tvQuickSkills = findViewById(R.id.tvQuickSkills);
 
         TextView profile = findViewById(R.id.linkMyProfile);
-        TextView sessions = findViewById(R.id.linkMySessions);
+        TextView sessions = findViewById(R.id.linkSessions);
         Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
         Button btnLogout = findViewById(R.id.btnLogout);
 
@@ -50,15 +51,25 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         loadTutorQuickProfile();
 
+        db.collection("Bookings")
+                .whereEqualTo("tutorId", tutorId)
+                .whereEqualTo("status", "pending")
+                .get()
+                .addOnSuccessListener(query -> {
+                    int count = query.size();
+                    sessions.setText("View Requests (" + count + ")");
+                });
+
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(TutorHomePageActivity.this, ProfileActivity.class);
             intent.putExtra("userType", "tutor");
             startActivity(intent);
         });
 
-        sessions.setOnClickListener(v ->
-                startActivity(new Intent(TutorHomePageActivity.this, TutorSessionsActivity.class))
-        );
+        sessions.setOnClickListener(v -> {
+            Intent intent = new Intent(TutorHomePageActivity.this, TutorSessionsActivity.class);
+            startActivity(intent);
+        });
 
         advertiseBtn.setOnClickListener(v ->
                 startActivity(new Intent(TutorHomePageActivity.this, AdvertiseServicesActivity.class))

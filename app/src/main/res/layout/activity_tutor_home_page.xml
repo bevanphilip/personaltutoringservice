@@ -78,25 +78,39 @@
         </LinearLayout>
 
         <!-- My Sessions -->
-        <TextView
-            android:id="@+id/linkMySessions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Sessions"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#0000EE"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginBottom="4dp" />
+        <LinearLayout
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View your tutoring sessions and schedule."
-            android:textSize="14sp"
-            android:textColor="#777777"
-            android:layout_marginBottom="20dp" />
+            <TextView
+                android:id="@+id/textSessionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Session Requests"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/linkSessions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All Requests"
+                android:textColor="#0000EE"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
 
         <!-- Advertise -->
         <Button
@@ -110,9 +124,6 @@
             android:backgroundTint="#6A00F4"
             android:layout_marginBottom="20dp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="220dp" />
 
         <Button
             android:id="@+id/btnLogout"

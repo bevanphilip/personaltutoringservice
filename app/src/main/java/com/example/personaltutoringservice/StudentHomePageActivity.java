@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class StudentHomePageActivity extends AppCompatActivity {
@@ -18,10 +20,10 @@ public class StudentHomePageActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
-
     private TextView welcomeText;
     private TextView tvQuickName;
     private TextView tvQuickInterests;
+    private LinearLayout layoutMyRequests;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -40,7 +42,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.textWelcome);
         tvQuickName = findViewById(R.id.tvQuickName);
         tvQuickInterests = findViewById(R.id.tvQuickInterests);
-
+        layoutMyRequests = findViewById(R.id.layoutMyRequests);
         TextView profile = findViewById(R.id.linkMyProfile);
         Button findTutor = findViewById(R.id.buttonFindTutor);
         Button btnLogout = findViewById(R.id.btnLogout);
@@ -79,6 +81,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadStudentQuickProfile();
+        loadStudentBookings();
     }
 
     private void loadStudentQuickProfile() {
@@ -105,6 +108,53 @@ public class StudentHomePageActivity extends AppCompatActivity {
                         welcomeText.setText("Welcome, " + username);
                         tvQuickName.setText("Name: " + username);
                         tvQuickInterests.setText("Interests: " + interests);
+                    }
+                });
+    }
+
+    private void loadStudentBookings() {
+
+        if (currentUser == null) return;
+
+        db.collection("Bookings")
+                .whereEqualTo("studentId", currentUser.getUid())
+                .get()
+                .addOnSuccessListener(query -> {
+
+                    layoutMyRequests.removeAllViews();
+
+                    if (query.isEmpty()) {
+                        TextView tv = new TextView(this);
+                        tv.setText("No requests yet");
+                        layoutMyRequests.addView(tv);
+                        return;
+                    }
+
+                    for (DocumentSnapshot doc : query.getDocuments()) {
+
+                        String status = doc.getString("status");
+                        String date = doc.getString("date");
+                        String time = doc.getString("time");
+                        String chatId = doc.getString("chatId");
+
+                        TextView tv = new TextView(this);
+
+                        tv.setText("Date: " + date + " | Time: " + time +
+                                "\nStatus: " + status);
+
+                        // 🔥 THIS IS WHERE CHAT OPENS
+                        if ("approved".equals(status) && chatId != null) {
+
+                            tv.setText(tv.getText() + "\nTap to chat");
+
+                            tv.setOnClickListener(v -> {
+                                Intent intent = new Intent(this, ChatActivity.class);
+                                intent.putExtra("chatId", chatId);
+                                startActivity(intent);
+                            });
+                        }
+
+                        layoutMyRequests.addView(tv);
                     }
                 });
     }
