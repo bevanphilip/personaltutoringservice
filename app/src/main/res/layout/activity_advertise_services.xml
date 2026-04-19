@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title" />
+
+        <EditText
+            android:id="@+id/etSubjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Subjects"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:minLines="4"
+            android:gravity="top"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Hourly Rate"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnPostService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Post Service"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+</ScrollView>

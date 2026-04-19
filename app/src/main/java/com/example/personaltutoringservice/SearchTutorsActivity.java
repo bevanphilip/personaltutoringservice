@@ -1,13 +1,17 @@
 package com.example.personaltutoringservice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,13 @@ public class SearchTutorsActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TutorAdapter(filteredTutors);
+
+        adapter = new TutorAdapter(filteredTutors, tutor -> {
+            Intent intent = new Intent(SearchTutorsActivity.this, TutorSearchDetailActivity.class);
+            intent.putExtra("tutorId", tutor.getId());
+            startActivity(intent);
+        });
+
         recyclerView.setAdapter(adapter);
 
         loadTutors();
@@ -51,6 +61,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
             }
         });
     }
+
     private void loadTutors() {
         db.collection("Tutors")
                 .get()
@@ -61,27 +72,26 @@ public class SearchTutorsActivity extends AppCompatActivity {
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
 
+                        String id = doc.getId();
                         String name = doc.getString("username");
                         String subject = doc.getString("skills");
                         String price = doc.getString("price");
                         String location = doc.getString("location");
 
-                        Tutor tutor = new Tutor(
-                                name,
-                                subject,
-                                price,
-                                location
-                        );
+                        Double ratingValue = doc.getDouble("ratingAverage");
+                        double rating = ratingValue != null ? ratingValue : 0.0;
 
+                        List<String> feedback = new ArrayList<>();
+
+                        Tutor tutor = new Tutor(id, name, subject, price, location, rating, feedback);
                         allTutors.add(tutor);
                     }
+
                     filteredTutors.addAll(allTutors);
                     adapter.notifyDataSetChanged();
 
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("FIRESTORE", "Error: " + e.getMessage());
-                });
+                .addOnFailureListener(e -> Log.e("FIRESTORE", "Error: " + e.getMessage()));
     }
 
     private void filterTutors(String query) {
@@ -93,14 +103,18 @@ public class SearchTutorsActivity extends AppCompatActivity {
             String lowerCaseQuery = query.toLowerCase();
 
             for (Tutor tutor : allTutors) {
+                String name = tutor.getName() != null ? tutor.getName().toLowerCase() : "";
+                String subject = tutor.getSubject() != null ? tutor.getSubject().toLowerCase() : "";
+                String location = tutor.getLocation() != null ? tutor.getLocation().toLowerCase() : "";
 
-                if (tutor.getName().toLowerCase().contains(lowerCaseQuery) ||
-                        tutor.getSubject().toLowerCase().contains(lowerCaseQuery)) {
-
+                if (name.contains(lowerCaseQuery) ||
+                        subject.contains(lowerCaseQuery) ||
+                        location.contains(lowerCaseQuery)) {
                     filteredTutors.add(tutor);
                 }
             }
         }
+
         adapter.notifyDataSetChanged();
     }
 }

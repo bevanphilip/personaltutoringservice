@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class StudentHomePageActivity extends AppCompatActivity {
+public class TutorHomePageActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -21,16 +21,16 @@ public class StudentHomePageActivity extends AppCompatActivity {
 
     private TextView welcomeText;
     private TextView tvQuickName;
-    private TextView tvQuickInterests;
+    private TextView tvQuickSkills;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_home_page);
+        setContentView(R.layout.activity_tutor_home_page);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Student Home");
+            getSupportActionBar().setTitle("Tutor Home");
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -39,24 +39,29 @@ public class StudentHomePageActivity extends AppCompatActivity {
 
         welcomeText = findViewById(R.id.textWelcome);
         tvQuickName = findViewById(R.id.tvQuickName);
-        tvQuickInterests = findViewById(R.id.tvQuickInterests);
+        tvQuickSkills = findViewById(R.id.tvQuickSkills);
 
         TextView profile = findViewById(R.id.linkMyProfile);
-        Button findTutor = findViewById(R.id.buttonFindTutor);
+        TextView sessions = findViewById(R.id.linkMySessions);
+        Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
         Button btnLogout = findViewById(R.id.btnLogout);
 
         welcomeText.setText("Welcome, User");
 
-        loadStudentQuickProfile();
+        loadTutorQuickProfile();
 
         profile.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra("userType", "student");
+            Intent intent = new Intent(TutorHomePageActivity.this, ProfileActivity.class);
+            intent.putExtra("userType", "tutor");
             startActivity(intent);
         });
 
-        findTutor.setOnClickListener(v ->
-                startActivity(new Intent(this, SearchTutorsActivity.class))
+        sessions.setOnClickListener(v ->
+                startActivity(new Intent(TutorHomePageActivity.this, TutorSessionsActivity.class))
+        );
+
+        advertiseBtn.setOnClickListener(v ->
+                startActivity(new Intent(TutorHomePageActivity.this, AdvertiseServicesActivity.class))
         );
 
         btnLogout.setOnClickListener(v -> {
@@ -65,7 +70,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(StudentHomePageActivity.this, MainActivity.class);
+                        Intent intent = new Intent(TutorHomePageActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();
@@ -78,33 +83,33 @@ public class StudentHomePageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadStudentQuickProfile();
+        loadTutorQuickProfile();
     }
 
-    private void loadStudentQuickProfile() {
+    private void loadTutorQuickProfile() {
         if (currentUser == null) {
             return;
         }
 
-        db.collection("Students")
+        db.collection("Tutors")
                 .document(currentUser.getUid())
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
                         String username = doc.getString("username");
-                        String interests = doc.getString("interests");
+                        String skills = doc.getString("skills");
 
                         if (username == null || username.trim().isEmpty()) {
                             username = "Not set";
                         }
 
-                        if (interests == null || interests.trim().isEmpty()) {
-                            interests = "Not set";
+                        if (skills == null || skills.trim().isEmpty()) {
+                            skills = "Not set";
                         }
 
                         welcomeText.setText("Welcome, " + username);
                         tvQuickName.setText("Name: " + username);
-                        tvQuickInterests.setText("Interests: " + interests);
+                        tvQuickSkills.setText("Skills: " + skills);
                     }
                 });
     }

@@ -147,8 +147,8 @@ public class RegisterActivity extends AppCompatActivity
                     if (firebaseUser != null)
                     {
                         firebaseUser.sendEmailVerification().addOnSuccessListener(unused ->
-                                Toast.makeText(this, "Verification email sent to " + mail, Toast.LENGTH_LONG).show()
-                        );
+                                        Toast.makeText(this, "Verification email sent to " + mail, Toast.LENGTH_LONG).show()
+                                );
 
                         saveUserDataToFirestore(firebaseUser.getUid(), user, mail, ph, addr, checkedRole);
                     }
@@ -158,7 +158,7 @@ public class RegisterActivity extends AppCompatActivity
 
     private void saveUserDataToFirestore(String uid, String user, String mail, String ph, String addr, int checkedRole) {
         Map<String, Object> userData = new HashMap<>();
-        userData.put("username", user.toLowerCase());
+        userData.put("username", user);
         userData.put("email", mail);
         userData.put("phone", ph);
         userData.put("address", addr);
@@ -178,16 +178,10 @@ public class RegisterActivity extends AppCompatActivity
             collectionName = "Tutors"; // or keep as "Users" and use role field
         }
 
-        // Option 1: Separate collections (as per "seperate the 2")
-        // Option 2: Single "Users" collection with role field (often easier for auth)
-        // I will use separate collections as requested, but also a central "Users" record is often helpful.
-        // Let's go with separate collections for clarity if that's what was meant.
-
         db.collection(collectionName).document(uid)
                 .set(userData)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                    // Redirect to login or home
                     startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     finish();
                 })
