@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             db.collection("Students")
-                    //.whereEqualTo("username", username.toLowerCase()) - Tutor kept giving Username not found think LowerCase had to do with it.
                     .whereEqualTo("username", username)
                     .get()
                     .addOnSuccessListener(studentSnapshot -> {
@@ -52,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                             loginWithEmail(email, password, "student");
                         } else {
                             db.collection("Tutors")
-                                    //.whereEqualTo("username", username.toLowerCase())
                                     .whereEqualTo("username", username)
                                     .get()
                                     .addOnSuccessListener(tutorSnapshot -> {
