@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvRequestTutorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tutor Name"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRequestSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvRequestAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Availability"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvRequestDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvRequestTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvRequestSessionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Session Type"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvRequestPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvRequestStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvPaymentStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment: Unpaid"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
+
+        <Button
+            android:id="@+id/btnPayNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pay Now"
+            android:visibility="gone"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnMessageTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message Tutor"
+            android:visibility="gone"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnCancelRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Request"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

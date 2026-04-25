@@ -2,6 +2,7 @@ package com.example.personaltutoringservice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +13,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class BecomeTutorActivity extends AppCompatActivity {
 
+    ImageButton homeBtn;
+    Button btnStartTutorSetup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +23,6 @@ public class BecomeTutorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_become_tutor);
 
-        // Set title AFTER setContentView (cleaner order)
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Become a Tutor");
         }
@@ -30,11 +33,17 @@ public class BecomeTutorActivity extends AppCompatActivity {
             return insets;
         });
 
-        ImageButton homeBtn = findViewById(R.id.btnHome);
+        homeBtn = findViewById(R.id.btnHome);
+        btnStartTutorSetup = findViewById(R.id.btnStartTutorSetup);
+
         homeBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
+
+        btnStartTutorSetup.setOnClickListener(v ->
+                startActivity(new Intent(this, ActivateTutorServicesActivity.class))
+        );
     }
 }

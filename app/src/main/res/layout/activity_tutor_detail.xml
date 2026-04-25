@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false" />
+
+        <ImageView
+            android:id="@+id/imgTutorProfile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@android:drawable/picture_frame"
+            android:contentDescription="Tutor profile picture placeholder"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/tvProfilePictureNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tutor Profile Picture"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/tvDetailName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tutor Name"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/tvDetailSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tvDetailRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvDetailPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvDetailAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Availability"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvDetailSessionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Session Type Offered: Online/In Person"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Schedule a Tutoring Session"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp" />
+
+        <TextView
+            android:id="@+id/tvSelectedDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selected Date: Not selected"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnSelectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Time Slot"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <Spinner
+            android:id="@+id/spinnerTimeSlot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Session Type"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <RadioGroup
+            android:id="@+id/rgSessionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <RadioButton
+                android:id="@+id/rbOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Online" />
+
+            <RadioButton
+                android:id="@+id/rbInPerson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In Person"
+                android:layout_marginStart="16dp" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnRequestSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Request Tutoring Session"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btnLeaveReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leave Review"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvReviewsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reviews"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp" />
+
+        <TextView
+            android:id="@+id/tvNoReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No reviews yet."
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnMessageTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message Tutor"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+</ScrollView>

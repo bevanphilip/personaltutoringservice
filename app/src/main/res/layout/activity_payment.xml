@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/tvPaymentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mock Payment"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/tvPaymentSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Summary"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:id="@+id/etCardName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name on Card"
+            android:layout_marginTop="20dp" />
+
+        <EditText
+            android:id="@+id/etCardNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Card Number"
+            android:inputType="number"
+            android:maxLength="16"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/etExpiration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Expiration Date (MM/YY)"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/etCvv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CVV"
+            android:inputType="numberPassword"
+            android:maxLength="4"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btnSubmitPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Mock Payment"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

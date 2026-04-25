@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Button;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,10 +31,12 @@ public class HomePageActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Student Home");
         }
 
+        // Welcome text
         TextView welcomeText = findViewById(R.id.textWelcome);
         String username = "User";
         welcomeText.setText("Welcome, " + username);
 
+        // ✅ FIXED (TextView instead of Button)
         TextView profile = findViewById(R.id.linkMyProfile);
         TextView myTutors = findViewById(R.id.linkMyTutors);
 
@@ -42,10 +44,12 @@ public class HomePageActivity extends AppCompatActivity {
         Button becomeTutor = findViewById(R.id.buttonBecomeTutor);
         Button btnLogout = findViewById(R.id.btnLogout);
 
+        // Featured tutor carousel
         featuredTutorFlipper = findViewById(R.id.featuredTutorFlipper);
 
         loadTopTutors();
 
+        // Navigation
         profile.setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 
@@ -58,6 +62,7 @@ public class HomePageActivity extends AppCompatActivity {
         becomeTutor.setOnClickListener(v ->
                 startActivity(new Intent(this, BecomeTutorActivity.class)));
 
+        // Logout
         btnLogout.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("Logout")
@@ -73,6 +78,7 @@ public class HomePageActivity extends AppCompatActivity {
         });
     }
 
+    // FEATURED TUTORS LOGIC
     private void loadTopTutors() {
         db.collection("tutors")
                 .orderBy("Rating", Query.Direction.DESCENDING)
@@ -105,6 +111,7 @@ public class HomePageActivity extends AppCompatActivity {
                     }
 
                     if (featuredTutorFlipper.getChildCount() > 1) {
+                        featuredTutorFlipper.setFlipInterval(3000);
                         featuredTutorFlipper.startFlipping();
                     }
                 });

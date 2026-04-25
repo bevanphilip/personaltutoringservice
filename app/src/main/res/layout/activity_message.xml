@@ -13,29 +13,35 @@
         android:text="← Back"
         android:textAllCaps="false" />
 
-    <SearchView
-        android:id="@+id/searchView"
+    <TextView
+        android:id="@+id/tvChatTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search tutors by subject"
-        android:layout_marginTop="8dp" />
-
-    <TextView
-        android:id="@+id/tvNoResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No tutors found"
-        android:textSize="16sp"
+        android:text="Message Tutor"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
+        android:gravity="center"
         android:layout_marginTop="12dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="12dp" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your message..."
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Message"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

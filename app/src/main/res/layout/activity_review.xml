@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/tvReviewTutorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Review for Tutor"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Rating"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1"
+            android:rating="0"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/etReviewComment"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:hint="Write your review..."
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="20dp"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btnSubmitReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Review"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

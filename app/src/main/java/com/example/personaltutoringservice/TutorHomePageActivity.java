@@ -1,16 +1,26 @@
 package com.example.personaltutoringservice;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class TutorHomePageActivity extends AppCompatActivity {
 
-    Button buttonActivateTutorServices, buttonTutoringRequests, btnLogout;
+    ImageButton btnBack;
+    ImageView imgProfilePicture;
+    Button btnUploadPicture, buttonActivateTutorServices, buttonTutoringRequests, btnBackToStudentHome, btnLogout;
+    TextView profile, studentRequests;
+
+    private ActivityResultLauncher<String> imagePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,26 +31,51 @@ public class TutorHomePageActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Tutor Home");
         }
 
-        TextView profile = findViewById(R.id.linkMyProfile);
-        TextView studentRequests = findViewById(R.id.linkStudentRequests);
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        imgProfilePicture.setImageURI(uri);
+                    }
+                }
+        );
+
+        btnBack = findViewById(R.id.btnBack);
+        imgProfilePicture = findViewById(R.id.imgProfilePicture);
+        btnUploadPicture = findViewById(R.id.btnUploadPicture);
+
+        profile = findViewById(R.id.linkMyProfile);
+        studentRequests = findViewById(R.id.linkStudentRequests);
 
         buttonActivateTutorServices = findViewById(R.id.buttonActivateTutorServices);
         buttonTutoringRequests = findViewById(R.id.buttonTutoringRequests);
+        btnBackToStudentHome = findViewById(R.id.btnBackToStudentHome);
         btnLogout = findViewById(R.id.btnLogout);
 
-        // My Profile page
-        profile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        btnBack.setOnClickListener(v -> finish());
 
-        // Student Requests page
-        studentRequests.setOnClickListener(v -> startActivity(new Intent(this, MyTutoringRequestsActivity.class)));
+        btnUploadPicture.setOnClickListener(v ->
+                imagePickerLauncher.launch("image/*")
+        );
 
-        // Activate Tutor Services page
-        buttonActivateTutorServices.setOnClickListener(v -> startActivity(new Intent(this, ActivateTutorServicesActivity.class)));
+        profile.setOnClickListener(v ->
+                startActivity(new Intent(this, ProfileActivity.class)));
 
-        // Tutoring Requests page
-        buttonTutoringRequests.setOnClickListener(v -> startActivity(new Intent(this, MyTutoringRequestsActivity.class)));
+        studentRequests.setOnClickListener(v ->
+                startActivity(new Intent(this, MyTutoringRequestsActivity.class)));
 
-        // Logout
+        buttonActivateTutorServices.setOnClickListener(v ->
+                startActivity(new Intent(this, ActivateTutorServicesActivity.class)));
+
+        buttonTutoringRequests.setOnClickListener(v ->
+                startActivity(new Intent(this, MyTutoringRequestsActivity.class)));
+
+        btnBackToStudentHome.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomePageActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
+
         btnLogout.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("Logout")

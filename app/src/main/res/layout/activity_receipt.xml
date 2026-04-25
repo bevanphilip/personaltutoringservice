@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Receipt"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tvReceiptStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Successful"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:id="@+id/tvReceiptDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Receipt details"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnBackToMyTutors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to My Tutors"
+            android:layout_marginTop="32dp" />
+
+    </LinearLayout>
+</ScrollView>

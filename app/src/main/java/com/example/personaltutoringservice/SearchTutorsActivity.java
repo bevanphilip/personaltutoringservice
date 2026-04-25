@@ -2,8 +2,7 @@ package com.example.personaltutoringservice;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,31 +44,44 @@ public class SearchTutorsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Tutor Search Page");
         }
 
+        // Safe padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Views
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recyclerView);
         tvNoResults = findViewById(R.id.tvNoResults);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TutorAdapter(filteredTutors);
-        recyclerView.setAdapter(adapter);
 
-        ImageButton homeBtn = findViewById(R.id.btnHome);
-        homeBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomePageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        // 🔥 CLICKABLE TUTOR CARDS
+        adapter = new TutorAdapter(filteredTutors, tutor -> {
+            Intent intent = new Intent(SearchTutorsActivity.this, TutorDetailActivity.class);
+
+            intent.putExtra("name", tutor.getName());
+            intent.putExtra("subject", tutor.getSubject());
+            intent.putExtra("rating", tutor.getRating());
+            intent.putExtra("price", tutor.getPrice());
+            intent.putExtra("availability", tutor.getAvailability());
+
             startActivity(intent);
         });
+
+        recyclerView.setAdapter(adapter);
+
+        // Back button
+        Button backBtn = findViewById(R.id.btnBack);
+        backBtn.setOnClickListener(v -> finish());
 
         loadTutors();
         setupSearch();
     }
 
+    // 🔥 LOAD FROM FIREBASE
     private void loadTutors() {
         db.collection("tutors")
                 .get()
@@ -93,6 +105,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
                 );
     }
 
+    // 🔍 SEARCH
     private void setupSearch() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -109,6 +122,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
         });
     }
 
+    // 🔍 FILTER
     private void filterTutors(String text) {
         filteredTutors.clear();
 
@@ -118,8 +132,10 @@ public class SearchTutorsActivity extends AppCompatActivity {
             filteredTutors.addAll(allTutors);
         } else {
             for (Tutor tutor : allTutors) {
-                if (tutor.getSubject() != null &&
-                        tutor.getSubject().toLowerCase().contains(searchText)) {
+                String subject = tutor.getSubject() != null ? tutor.getSubject().toLowerCase() : "";
+                String name = tutor.getName() != null ? tutor.getName().toLowerCase() : "";
+
+                if (subject.contains(searchText) || name.contains(searchText)) {
                     filteredTutors.add(tutor);
                 }
             }
@@ -129,12 +145,13 @@ public class SearchTutorsActivity extends AppCompatActivity {
         updateNoResultsMessage();
     }
 
+    // 📭 EMPTY STATE
     private void updateNoResultsMessage() {
         if (filteredTutors.isEmpty()) {
             tvNoResults.setText("No tutors found");
-            tvNoResults.setVisibility(View.VISIBLE);
+            tvNoResults.setVisibility(TextView.VISIBLE);
         } else {
-            tvNoResults.setVisibility(View.GONE);
+            tvNoResults.setVisibility(TextView.GONE);
         }
     }
 }

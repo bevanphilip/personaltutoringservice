@@ -1,11 +1,13 @@
 package com.example.personaltutoringservice;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -13,9 +15,15 @@ import java.util.List;
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHolder> {
 
     private List<Tutor> tutorList;
+    private OnTutorClickListener listener;
 
-    public TutorAdapter(List<Tutor> tutorList) {
+    public interface OnTutorClickListener {
+        void onTutorClick(Tutor tutor);
+    }
+
+    public TutorAdapter(List<Tutor> tutorList, OnTutorClickListener listener) {
         this.tutorList = tutorList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -30,14 +38,11 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
     public void onBindViewHolder(@NonNull TutorViewHolder holder, int position) {
         Tutor tutor = tutorList.get(position);
 
-        // Name
-        holder.tvName.setText(tutor.getName());
+        holder.tvName.setText(tutor.getName() != null ? tutor.getName() : "Tutor");
 
-        // Subject
         String subject = tutor.getSubject() != null ? tutor.getSubject() : "General";
         holder.tvSubject.setText(subject);
 
-        // Dynamic subject color
         int colorRes;
         switch (subject.toLowerCase()) {
             case "mathematics":
@@ -50,6 +55,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
                 break;
             case "programming":
             case "engineering":
+            case "java":
                 colorRes = R.color.subject_programming;
                 break;
             default:
@@ -57,22 +63,28 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.TutorViewHol
         }
 
         holder.tvSubject.setBackgroundTintList(
-                holder.itemView.getContext().getColorStateList(colorRes)
+                ColorStateList.valueOf(
+                        ContextCompat.getColor(holder.itemView.getContext(), colorRes)
+                )
         );
 
-        // Rating
         if (tutor.getRating() != null) {
-            holder.tvRating.setText(String.format("%.1f", tutor.getRating()));
+            holder.tvRating.setText("⭐ " + String.format("%.1f", tutor.getRating()));
         } else {
-            holder.tvRating.setText("N/A");
+            holder.tvRating.setText("⭐ N/A");
         }
 
-        // Price
         if (tutor.getPrice() != null) {
             holder.tvPrice.setText(String.format("$%.0f/hr", tutor.getPrice()));
         } else {
             holder.tvPrice.setText("$--/hr");
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onTutorClick(tutor);
+            }
+        });
     }
 
     @Override

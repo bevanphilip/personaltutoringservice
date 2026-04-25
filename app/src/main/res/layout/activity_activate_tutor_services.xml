@@ -1,21 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ActivateTutorServicesActivity">
+    android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/btnHome"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/baseline_home_24"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/home"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp"/>
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- HOME BUTTON -->
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_home_24"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Home"
+            android:layout_gravity="end" />
+
+        <!-- TITLE -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activate Tutor Services"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+        <!-- SUBJECT -->
+        <EditText
+            android:id="@+id/etSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Subject (e.g. Math, Programming)"
+            android:layout_marginTop="16dp"/>
+
+        <!-- PRICE -->
+        <EditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price per hour"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="10dp"/>
+
+        <!-- AVAILABILITY -->
+        <EditText
+            android:id="@+id/etAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Availability (e.g. Weekends, Evenings)"
+            android:layout_marginTop="10dp"/>
+
+        <!-- LOCATION -->
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location or Online"
+            android:layout_marginTop="10dp"/>
+
+        <!-- SUBMIT BUTTON -->
+        <Button
+            android:id="@+id/btnSubmitTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activate Services"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

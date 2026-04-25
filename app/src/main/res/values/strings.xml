@@ -52,4 +52,7 @@
     <string name="my_tutors">My Tutors</string>
     <string name="my_tutors_description">View your saved tutors and upcoming sessions.</string>
 
+    <string name="my_profile_link"><u>My Profile</u></string>
+    <string name="my_tutors_link"><u>My Tutors</u></string>
+
 </resources>
