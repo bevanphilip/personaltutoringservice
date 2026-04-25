@@ -1,18 +1,17 @@
 package com.example.personaltutoringservice;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -37,7 +36,7 @@ public class TutorSessionsActivity extends AppCompatActivity {
         layoutSessions = findViewById(R.id.layoutSessionsContainer);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("My Sessions");
+            getSupportActionBar().setTitle("Session Requests");
         }
 
         loadBookings();
@@ -88,14 +87,16 @@ public class TutorSessionsActivity extends AppCompatActivity {
         CardView card = new CardView(this);
         card.setRadius(12f);
         card.setCardElevation(6f);
+        card.setUseCompatPadding(true);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(24, 24, 24, 24);
 
         TextView tvInfo = new TextView(this);
-        tvInfo.setText("Date: " + date + "\nTime: " + time +
-                "\nComment: " + comment);
+        tvInfo.setText("Date: " + safeText(date) +
+                "\nTime: " + safeText(time) +
+                "\nComment: " + safeText(comment));
 
         Button btnApprove = new Button(this);
         btnApprove.setText("Approve");
@@ -164,11 +165,16 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
                                     Toast.makeText(this, "Booking approved", Toast.LENGTH_SHORT).show();
 
-                                    // Step 3: Open chat
-                                    Intent intent = new Intent(this, ChatActivity.class);
+                                    // Step 3: Open session details page
+                                    Intent intent = new Intent(this, SessionDetailActivity.class);
                                     intent.putExtra("chatId", chatId);
+                                    intent.putExtra("bookingId", bookingId);
                                     startActivity(intent);
-                                });
+                                    finish();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(this, "Error updating booking", Toast.LENGTH_SHORT).show()
+                                );
                     })
                     .addOnFailureListener(e ->
                             Toast.makeText(this, "Error creating chat", Toast.LENGTH_SHORT).show()
@@ -189,4 +195,7 @@ public class TutorSessionsActivity extends AppCompatActivity {
         }
     }
 
+    private String safeText(String value) {
+        return value == null || value.trim().isEmpty() ? "Not set" : value;
+    }
 }

@@ -48,26 +48,12 @@ public class TutorHomePageActivity extends AppCompatActivity {
         TextView profile = findViewById(R.id.linkMyProfile);
         TextView sessions = findViewById(R.id.linkSessions);
         Button btnTutorHistory = findViewById(R.id.btnTutorHistory);
-        //Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
         Button btnLogout = findViewById(R.id.btnLogout);
 
         welcomeText.setText("Welcome, User");
 
         loadTutorQuickProfile();
         loadTutorBookings();
-
-        if (currentUser != null) {
-            String tutorId = currentUser.getUid();
-
-            db.collection("Bookings")
-                    .whereEqualTo("tutorId", tutorId)
-                    .whereEqualTo("status", "pending")
-                    .get()
-                    .addOnSuccessListener(query -> {
-                        int count = query.size();
-                        sessions.setText("View Requests (" + count + ")");
-                    });
-        }
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(TutorHomePageActivity.this, ProfileActivity.class);
@@ -85,10 +71,6 @@ public class TutorHomePageActivity extends AppCompatActivity {
             intent.putExtra("userType", "tutor");
             startActivity(intent);
         });
-
-//        advertiseBtn.setOnClickListener(v ->
-//                startActivity(new Intent(TutorHomePageActivity.this, AdvertiseServicesActivity.class))
-//        );
 
         btnLogout.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
@@ -147,20 +129,13 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         db.collection("Bookings")
                 .whereEqualTo("tutorId", currentUser.getUid())
-                .whereEqualTo("status", "approved")
                 .get()
                 .addOnSuccessListener(query -> {
 
                     layoutTutorSessions.removeAllViews();
 
-                    if (query.isEmpty()) {
-                        TextView tv = new TextView(this);
-                        tv.setText("No active sessions yet");
-                        tv.setTextSize(15f);
-                        tv.setTextColor(0xFF666666);
-                        layoutTutorSessions.addView(tv);
-                        return;
-                    }
+                    boolean hasVisibleSession = false;
+                    int pendingCount = 0;
 
                     for (DocumentSnapshot doc : query.getDocuments()) {
 
@@ -170,13 +145,32 @@ public class TutorHomePageActivity extends AppCompatActivity {
                         String comment = doc.getString("comment");
                         String chatId = doc.getString("chatId");
 
+                        if ("completed".equals(status) || "denied".equals(status)) {
+                            continue;
+                        }
+
+                        hasVisibleSession = true;
+
+                        if ("pending".equals(status)) {
+                            pendingCount++;
+                        }
+
                         TextView tv = new TextView(this);
 
                         tv.setText("Date: " + safeText(date) + " | Time: " + safeText(time) +
                                 "\nStatus: " + safeText(status) +
                                 "\nComment: " + safeText(comment));
 
-                        if (chatId != null) {
+                        if ("pending".equals(status)) {
+                            tv.setText(tv.getText() + "\nTap to approve or deny");
+
+                            tv.setOnClickListener(v -> {
+                                Intent intent = new Intent(this, TutorSessionsActivity.class);
+                                startActivity(intent);
+                            });
+                        }
+
+                        if ("approved".equals(status) && chatId != null) {
 
                             tv.setText(tv.getText() + "\nTap to view session");
 
@@ -206,6 +200,17 @@ public class TutorHomePageActivity extends AppCompatActivity {
                         tv.setTextColor(0xFF666666);
                         tv.setPadding(0, 12, 0, 12);
 
+                        layoutTutorSessions.addView(tv);
+                    }
+
+                    TextView sessions = findViewById(R.id.linkSessions);
+                    sessions.setText("View Requests (" + pendingCount + ")");
+
+                    if (!hasVisibleSession) {
+                        TextView tv = new TextView(this);
+                        tv.setText("No active sessions or pending requests yet");
+                        tv.setTextSize(15f);
+                        tv.setTextColor(0xFF666666);
                         layoutTutorSessions.addView(tv);
                     }
                 });
