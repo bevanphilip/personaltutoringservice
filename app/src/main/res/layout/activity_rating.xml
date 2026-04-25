@@ -6,10 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/btnBackRating"
+        android:text="Back"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:text="Rate your tutor"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -17,7 +25,8 @@
     <RatingBar
         android:id="@+id/ratingBar"
         android:numStars="5"
-        android:stepSize="1"
+        android:stepSize="0.5"
+        android:rating="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

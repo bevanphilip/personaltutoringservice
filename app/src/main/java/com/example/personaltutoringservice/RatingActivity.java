@@ -21,12 +21,16 @@ public class RatingActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private EditText etComment;
     private Button btnSubmit;
+    private Button btnBackRating;
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
     private String tutorId;
     private String bookingId;
+    private String studentId;
+
+    private boolean feedbackAlreadySubmitted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class RatingActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         etComment = findViewById(R.id.etComment);
         btnSubmit = findViewById(R.id.btnSubmitRating);
+        btnBackRating = findViewById(R.id.btnBackRating);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -47,44 +52,111 @@ public class RatingActivity extends AppCompatActivity {
         tutorId = getIntent().getStringExtra("tutorId");
         bookingId = getIntent().getStringExtra("bookingId");
 
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(this, "You must be logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        studentId = mAuth.getCurrentUser().getUid();
+
+        btnBackRating.setOnClickListener(v -> finish());
+
+        loadExistingFeedback();
+
         btnSubmit.setOnClickListener(v -> submitRating());
+    }
+
+    private void loadExistingFeedback() {
+
+        if (bookingId == null || studentId == null) {
+            return;
+        }
+
+        String feedbackDocId = bookingId + "_" + studentId;
+
+        db.collection("TutorFeedback")
+                .document(feedbackDocId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        feedbackAlreadySubmitted = true;
+
+                        Double ratingDouble = doc.getDouble("rating");
+                        String comment = doc.getString("comment");
+
+                        if (ratingDouble != null) {
+                            ratingBar.setRating(ratingDouble.floatValue());
+                        }
+
+                        if (comment != null) {
+                            etComment.setText(comment);
+                        }
+
+                        ratingBar.setIsIndicator(true);
+                        etComment.setEnabled(false);
+                        btnSubmit.setEnabled(false);
+                        btnSubmit.setText("Feedback Already Submitted");
+                    }
+                });
     }
 
     private void submitRating() {
 
+        if (feedbackAlreadySubmitted) {
+            Toast.makeText(this, "Feedback already submitted", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         float ratingValue = ratingBar.getRating();
         String comment = etComment.getText().toString().trim();
-        String studentId = mAuth.getCurrentUser().getUid();
 
         if (ratingValue == 0) {
             Toast.makeText(this, "Please select a rating", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 🔹 Save feedback
+        if (tutorId == null || bookingId == null) {
+            Toast.makeText(this, "Missing session information", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String feedbackDocId = bookingId + "_" + studentId;
+
         Map<String, Object> feedback = new HashMap<>();
         feedback.put("tutorId", tutorId);
         feedback.put("studentId", studentId);
+        feedback.put("bookingId", bookingId);
         feedback.put("rating", ratingValue);
         feedback.put("comment", comment);
+        feedback.put("feedback", comment);
         feedback.put("timestamp", FieldValue.serverTimestamp());
 
         db.collection("TutorFeedback")
-                .add(feedback)
+                .document(feedbackDocId)
+                .set(feedback)
                 .addOnSuccessListener(doc -> {
 
-                    // Update tutor rating
+                    db.collection("Tutors")
+                            .document(tutorId)
+                            .collection("TutorFeedback")
+                            .document(feedbackDocId)
+                            .set(feedback);
+
                     updateTutorRating(tutorId, ratingValue);
 
-                    // Mark booking as rated (IMPORTANT)
-                    if (bookingId != null) {
-                        db.collection("Bookings")
-                                .document(bookingId)
-                                .update("rated", true);
-                    }
+                    db.collection("Bookings")
+                            .document(bookingId)
+                            .update("rated", true);
+
+                    feedbackAlreadySubmitted = true;
+
+                    ratingBar.setIsIndicator(true);
+                    etComment.setEnabled(false);
+                    btnSubmit.setEnabled(false);
+                    btnSubmit.setText("Feedback Already Submitted");
 
                     Toast.makeText(this, "Thanks for your feedback!", Toast.LENGTH_SHORT).show();
-                    finish();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Error submitting rating", Toast.LENGTH_SHORT).show()

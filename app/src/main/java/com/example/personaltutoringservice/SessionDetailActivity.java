@@ -1,5 +1,6 @@
 package com.example.personaltutoringservice;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -27,88 +28,106 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity {
+public class SessionDetailActivity extends AppCompatActivity {
 
-    EditText messageInput;
-    Button sendBtn, btnBackChat;
+    TextView tvDetails, tvTitle;
     LinearLayout chatContainer;
+    EditText etMessage;
+    Button btnSend, btnFeedback, btnBack;
     ScrollView scrollChat;
-    TextView tvChatTitle;
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    String chatId;
+
+    String bookingId, chatId, tutorId, studentId;
     String currentUserId;
-    String studentId;
-    String tutorId;
     String studentName = "Student";
     String tutorName = "Tutor";
-    Timestamp chatExpireAt;
+
+    Timestamp sessionTimestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_session_detail);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        chatId = getIntent().getStringExtra("chatId");
-
-        if (chatId == null || chatId.trim().isEmpty()) {
-            Toast.makeText(this, "Chat not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        bookingId = getIntent().getStringExtra("bookingId");
+        chatId = getIntent().getStringExtra("chatId");
+
         if (mAuth.getCurrentUser() == null) {
-            Toast.makeText(this, "You must be logged in", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         currentUserId = mAuth.getCurrentUser().getUid();
 
-        messageInput = findViewById(R.id.etMessage);
-        sendBtn = findViewById(R.id.btnSend);
-        btnBackChat = findViewById(R.id.btnBackChat);
+        tvDetails = findViewById(R.id.tvSessionDetails);
+        tvTitle = findViewById(R.id.tvSessionTitle);
         chatContainer = findViewById(R.id.chatContainer);
+        etMessage = findViewById(R.id.etMessage);
+        btnSend = findViewById(R.id.btnSend);
+        btnFeedback = findViewById(R.id.btnFeedback);
+        btnBack = findViewById(R.id.btnBack);
         scrollChat = findViewById(R.id.scrollChat);
-        tvChatTitle = findViewById(R.id.tvChatTitle);
 
-        btnBackChat.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> finish());
 
-        loadChatInfo();
+        loadSessionDetails();
 
-        sendBtn.setOnClickListener(v -> sendMessage());
+        btnSend.setOnClickListener(v -> sendMessage());
+        btnFeedback.setOnClickListener(v -> handleFeedback());
     }
 
-    private void loadChatInfo() {
-        db.collection("Chats")
-                .document(chatId)
+    private void loadSessionDetails() {
+
+        if (bookingId == null || chatId == null) {
+            Toast.makeText(this, "Session not found", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        db.collection("Bookings")
+                .document(bookingId)
                 .get()
                 .addOnSuccessListener(doc -> {
+
                     if (!doc.exists()) {
-                        Toast.makeText(this, "Chat no longer exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Session not found", Toast.LENGTH_SHORT).show();
                         finish();
                         return;
                     }
 
-                    studentId = doc.getString("studentId");
-                    tutorId = doc.getString("tutorId");
-                    chatExpireAt = doc.getTimestamp("expireAt");
+                    String date = doc.getString("date");
+                    String time = doc.getString("time");
+                    String comment = doc.getString("comment");
+                    String location = doc.getString("location");
+                    String status = doc.getString("status");
 
-                    markChatAsRead();
+                    tutorId = doc.getString("tutorId");
+                    studentId = doc.getString("studentId");
+
+                    sessionTimestamp = doc.getTimestamp("sessionTimestamp");
+
+                    tvDetails.setText(
+                            "Date: " + safe(date) +
+                                    "\nTime: " + safe(time) +
+                                    "\nLocation: " + safe(location) +
+                                    "\nStatus: " + safe(status) +
+                                    "\nComment: " + safe(comment)
+                    );
+
                     loadUserNames();
                     loadMessages();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error loading chat", Toast.LENGTH_SHORT).show()
-                );
+                    setupFeedbackButton();
+                    markChatAsRead();
+                });
     }
 
     private void loadUserNames() {
@@ -120,7 +139,6 @@ public class ChatActivity extends AppCompatActivity {
                         String name = doc.getString("username");
                         if (name != null && !name.trim().isEmpty()) {
                             studentName = name;
-                            updateChatTitle();
                         }
                     });
         }
@@ -133,31 +151,24 @@ public class ChatActivity extends AppCompatActivity {
                         String name = doc.getString("username");
                         if (name != null && !name.trim().isEmpty()) {
                             tutorName = name;
-                            updateChatTitle();
                         }
                     });
         }
     }
 
-    private void updateChatTitle() {
+    private void setupFeedbackButton() {
         if (currentUserId.equals(studentId)) {
-            tvChatTitle.setText("Chat with " + tutorName);
+            btnFeedback.setText("Leave Feedback");
         } else if (currentUserId.equals(tutorId)) {
-            tvChatTitle.setText("Chat with " + studentName);
+            btnFeedback.setText("View Received Feedback");
         } else {
-            tvChatTitle.setText("Chat");
+            btnFeedback.setText("Feedback");
         }
     }
 
-    private void markChatAsRead() {
-        db.collection("Chats")
-                .document(chatId)
-                .update("unreadFor", FieldValue.arrayRemove(currentUserId));
-    }
-
     private void sendMessage() {
-        String text = messageInput.getText().toString().trim();
 
+        String text = etMessage.getText().toString().trim();
         if (text.isEmpty()) return;
 
         String otherUserId = getOtherUserId();
@@ -168,20 +179,12 @@ public class ChatActivity extends AppCompatActivity {
         msg.put("text", text);
         msg.put("timestamp", FieldValue.serverTimestamp());
 
-        if (chatExpireAt != null) {
-            msg.put("expireAt", chatExpireAt);
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_YEAR, 14);
-            msg.put("expireAt", new Timestamp(calendar.getTime()));
-        }
-
         db.collection("Chats")
                 .document(chatId)
                 .collection("Messages")
                 .add(msg)
-                .addOnSuccessListener(doc -> {
-                    messageInput.setText("");
+                .addOnSuccessListener(d -> {
+                    etMessage.setText("");
 
                     Map<String, Object> chatUpdate = new HashMap<>();
                     chatUpdate.put("lastMessage", text);
@@ -195,13 +198,11 @@ public class ChatActivity extends AppCompatActivity {
                     db.collection("Chats")
                             .document(chatId)
                             .update(chatUpdate);
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error sending message", Toast.LENGTH_SHORT).show()
-                );
+                });
     }
 
     private void loadMessages() {
+
         db.collection("Chats")
                 .document(chatId)
                 .collection("Messages")
@@ -233,7 +234,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void addMessageBubble(String senderId, String text, Timestamp timestamp) {
 
-        boolean isMe = currentUserId.equals(senderId);
+        boolean isMe = senderId != null && senderId.equals(currentUserId);
 
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.VERTICAL);
@@ -254,8 +255,8 @@ public class ChatActivity extends AppCompatActivity {
         nameView.setGravity(isMe ? Gravity.END : Gravity.START);
 
         TextView bubble = new TextView(this);
-        bubble.setText(safeText(text));
-        bubble.setTextSize(16f);
+        bubble.setText(safe(text));
+        bubble.setTextSize(15f);
         bubble.setTextColor(isMe ? Color.WHITE : Color.BLACK);
         bubble.setPadding(18, 12, 18, 12);
 
@@ -273,7 +274,7 @@ public class ChatActivity extends AppCompatActivity {
         bubble.setLayoutParams(bubbleParams);
 
         TextView timeView = new TextView(this);
-        timeView.setText(formatTimestamp(timestamp));
+        timeView.setText(format(timestamp));
         timeView.setTextSize(11f);
         timeView.setTextColor(Color.GRAY);
         timeView.setGravity(isMe ? Gravity.END : Gravity.START);
@@ -283,6 +284,48 @@ public class ChatActivity extends AppCompatActivity {
         row.addView(timeView);
 
         chatContainer.addView(row);
+    }
+
+    private void handleFeedback() {
+
+        if (currentUserId.equals(tutorId)) {
+            Toast.makeText(this, "Received feedback page coming next", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (sessionTimestamp == null) {
+            Toast.makeText(this, "Session time not set", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Calendar now = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTime(sessionTimestamp.toDate());
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(sessionTimestamp.toDate());
+        end.add(Calendar.DAY_OF_YEAR, 7);
+
+        if (now.before(start)) {
+            Toast.makeText(this, "Feedback not available yet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (now.after(end)) {
+            Toast.makeText(this, "Feedback period ended", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent i = new Intent(this, RatingActivity.class);
+        i.putExtra("tutorId", tutorId);
+        i.putExtra("bookingId", bookingId);
+        startActivity(i);
+    }
+
+    private void markChatAsRead() {
+        db.collection("Chats")
+                .document(chatId)
+                .update("unreadFor", FieldValue.arrayRemove(currentUserId));
     }
 
     private String getOtherUserId() {
@@ -315,16 +358,14 @@ public class ChatActivity extends AppCompatActivity {
         return "Them";
     }
 
-    private String formatTimestamp(Timestamp timestamp) {
-        if (timestamp == null) {
-            return "";
-        }
+    private String format(Timestamp ts) {
+        if (ts == null) return "";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault());
-        return sdf.format(timestamp.toDate());
+        return new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault())
+                .format(ts.toDate());
     }
 
-    private String safeText(String value) {
-        return value == null || value.trim().isEmpty() ? "" : value;
+    private String safe(String s) {
+        return s == null || s.trim().isEmpty() ? "N/A" : s;
     }
 }

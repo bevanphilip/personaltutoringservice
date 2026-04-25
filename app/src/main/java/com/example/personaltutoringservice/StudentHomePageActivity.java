@@ -147,9 +147,24 @@ public class StudentHomePageActivity extends AppCompatActivity {
 
                             tv.setText(tv.getText() + "\nTap to chat");
 
+                            db.collection("Chats")
+                                    .document(chatId)
+                                    .get()
+                                    .addOnSuccessListener(chatDoc -> {
+                                        if (chatDoc.exists()) {
+                                            java.util.List<String> unreadFor =
+                                                    (java.util.List<String>) chatDoc.get("unreadFor");
+
+                                            if (unreadFor != null && unreadFor.contains(currentUser.getUid())) {
+                                                tv.setText(tv.getText() + "\nNEW MESSAGE");
+                                            }
+                                        }
+                                    });
+
                             tv.setOnClickListener(v -> {
-                                Intent intent = new Intent(this, ChatActivity.class);
+                                Intent intent = new Intent(this, SessionDetailActivity.class);
                                 intent.putExtra("chatId", chatId);
+                                intent.putExtra("bookingId", doc.getId());
                                 startActivity(intent);
                             });
                         }

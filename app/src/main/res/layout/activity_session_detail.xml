@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sessionPageScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6A00F4"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvSessionTitle"
+            android:text="Session Details"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvSessionDetails"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="#666666"
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Chat"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="360dp">
+
+            <ScrollView
+                android:id="@+id/scrollChat"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="4dp">
+
+                <LinearLayout
+                    android:id="@+id/chatContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp">
+
+                <EditText
+                    android:id="@+id/etMessage"
+                    android:hint="Type message"
+                    android:minHeight="48dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnSend"
+                    android:text="Send"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#6A00F4"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnFeedback"
+            android:text="Leave Feedback"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6A00F4"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

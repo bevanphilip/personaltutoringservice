@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +23,12 @@ public class BookingActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     String tutorId;
+
+    private int selectedYear;
+    private int selectedMonth;
+    private int selectedDay;
+    private int selectedHour;
+    private int selectedMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +56,13 @@ public class BookingActivity extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
 
             new DatePickerDialog(this,
-                    (view, year, month, day) ->
-                            etDate.setText(day + "/" + (month + 1) + "/" + year),
+                    (view, year, month, day) -> {
+                        selectedYear = year;
+                        selectedMonth = month;
+                        selectedDay = day;
+
+                        etDate.setText(day + "/" + (month + 1) + "/" + year);
+                    },
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -62,8 +74,12 @@ public class BookingActivity extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
 
             new TimePickerDialog(this,
-                    (view, hour, minute) ->
-                            etTime.setText(hour + ":" + minute),
+                    (view, hour, minute) -> {
+                        selectedHour = hour;
+                        selectedMinute = minute;
+
+                        etTime.setText(hour + ":" + minute);
+                    },
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
                     true).show();
@@ -88,6 +104,7 @@ public class BookingActivity extends AppCompatActivity {
         booking.put("tutorId", tutorId);
         booking.put("date", date);
         booking.put("time", time);
+        booking.put("sessionTimestamp", getSessionTimestamp());
         booking.put("comment", comment);
         booking.put("status", "pending");
         booking.put("timestamp", FieldValue.serverTimestamp());
@@ -106,5 +123,18 @@ public class BookingActivity extends AppCompatActivity {
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Error saving booking", Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private Timestamp getSessionTimestamp() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, selectedYear);
+        calendar.set(Calendar.MONTH, selectedMonth);
+        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+        calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+        calendar.set(Calendar.MINUTE, selectedMinute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return new Timestamp(calendar.getTime());
     }
 }

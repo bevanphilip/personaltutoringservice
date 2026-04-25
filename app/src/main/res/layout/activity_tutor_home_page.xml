@@ -105,6 +105,24 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/textMySessionsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Sessions"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/layoutTutorSessions"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
 
 
@@ -112,17 +130,17 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-<!--        &lt;!&ndash; Advertise &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/buttonAdvertiseServices"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Advertise My Services"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textSize="22sp"-->
-<!--            android:textColor="#FFFFFF"-->
-<!--            android:backgroundTint="#6A00F4"-->
-<!--            android:layout_marginBottom="20dp" />-->
+        <!--        &lt;!&ndash; Advertise &ndash;&gt;-->
+        <!--        <Button-->
+        <!--            android:id="@+id/buttonAdvertiseServices"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Advertise My Services"-->
+        <!--            android:textAllCaps="false"-->
+        <!--            android:textSize="22sp"-->
+        <!--            android:textColor="#FFFFFF"-->
+        <!--            android:backgroundTint="#6A00F4"-->
+        <!--            android:layout_marginBottom="20dp" />-->
 
         <!-- Logout -->
         <Button

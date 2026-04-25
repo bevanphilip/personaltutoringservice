@@ -10,12 +10,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,11 +134,17 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
         if (status.equals("approved")) {
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, 14);
+            Timestamp expireAt = new Timestamp(calendar.getTime());
+
             // Step 1: Create chat
             Map<String, Object> chat = new HashMap<>();
             chat.put("studentId", studentId);
             chat.put("tutorId", tutorId);
+            chat.put("bookingId", bookingId);
             chat.put("timestamp", FieldValue.serverTimestamp());
+            chat.put("expireAt", expireAt);
 
             db.collection("Chats")
                     .add(chat)
@@ -149,7 +157,8 @@ public class TutorSessionsActivity extends AppCompatActivity {
                                 .document(bookingId)
                                 .update(
                                         "status", "approved",
-                                        "chatId", chatId
+                                        "chatId", chatId,
+                                        "chatExpireAt", expireAt
                                 )
                                 .addOnSuccessListener(aVoid -> {
 
