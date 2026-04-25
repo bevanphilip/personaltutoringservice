@@ -28,6 +28,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("My History");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -117,5 +118,10 @@ public class SessionHistoryActivity extends AppCompatActivity {
 
     private String safeText(String value) {
         return value == null || value.trim().isEmpty() ? "Not set" : value;
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

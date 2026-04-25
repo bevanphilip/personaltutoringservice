@@ -37,6 +37,7 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Session Requests");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         loadBookings();
@@ -197,5 +198,10 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
     private String safeText(String value) {
         return value == null || value.trim().isEmpty() ? "Not set" : value;
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

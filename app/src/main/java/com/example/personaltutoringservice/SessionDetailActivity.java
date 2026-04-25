@@ -34,7 +34,7 @@ public class SessionDetailActivity extends AppCompatActivity {
     TextView tvDetails, tvTitle;
     LinearLayout chatContainer;
     EditText etMessage;
-    Button btnSend, btnFeedback, btnBack, btnCompleteSession;
+    Button btnSend, btnFeedback, btnCompleteSession;
     ScrollView scrollChat;
 
     FirebaseFirestore db;
@@ -56,7 +56,8 @@ public class SessionDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session_detail);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
+            getSupportActionBar().setTitle("Session Details");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         db = FirebaseFirestore.getInstance();
@@ -79,11 +80,9 @@ public class SessionDetailActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
         btnFeedback = findViewById(R.id.btnFeedback);
-        btnBack = findViewById(R.id.btnBack);
         btnCompleteSession = findViewById(R.id.btnCompleteSession);
         scrollChat = findViewById(R.id.scrollChat);
 
-        btnBack.setOnClickListener(v -> finish());
         btnSend.setOnClickListener(v -> sendMessage());
         btnFeedback.setOnClickListener(v -> handleFeedback());
         btnCompleteSession.setOnClickListener(v -> completeSession());
@@ -410,5 +409,11 @@ public class SessionDetailActivity extends AppCompatActivity {
 
     private String safe(String s) {
         return s == null || s.trim().isEmpty() ? "N/A" : s;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

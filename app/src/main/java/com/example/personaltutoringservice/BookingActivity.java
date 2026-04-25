@@ -35,6 +35,11 @@ public class BookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Book Session");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         etDate = findViewById(R.id.etDate);
         etTime = findViewById(R.id.etTime);
         etComment = findViewById(R.id.etComment);
@@ -136,5 +141,10 @@ public class BookingActivity extends AppCompatActivity {
         calendar.set(Calendar.MILLISECOND, 0);
 
         return new Timestamp(calendar.getTime());
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

@@ -16,7 +16,6 @@ import java.util.Locale;
 public class SessionFeedbackActivity extends AppCompatActivity {
 
     private TextView tvFeedbackTitle, tvFeedbackDetails;
-    private Button btnBackFeedback;
 
     private FirebaseFirestore db;
 
@@ -31,19 +30,17 @@ public class SessionFeedbackActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Session Feedback");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         db = FirebaseFirestore.getInstance();
 
         tvFeedbackTitle = findViewById(R.id.tvFeedbackTitle);
         tvFeedbackDetails = findViewById(R.id.tvFeedbackDetails);
-        btnBackFeedback = findViewById(R.id.btnBackFeedback);
 
         bookingId = getIntent().getStringExtra("bookingId");
         studentId = getIntent().getStringExtra("studentId");
         tutorId = getIntent().getStringExtra("tutorId");
-
-        btnBackFeedback.setOnClickListener(v -> finish());
 
         loadFeedback();
     }
@@ -97,5 +94,10 @@ public class SessionFeedbackActivity extends AppCompatActivity {
 
     private String safeText(String value) {
         return value == null || value.trim().isEmpty() ? "No written feedback" : value;
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

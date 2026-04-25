@@ -21,8 +21,6 @@ public class RatingActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private EditText etComment;
     private Button btnSubmit;
-    private Button btnBackRating;
-
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -39,12 +37,12 @@ public class RatingActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Rate Tutor");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         ratingBar = findViewById(R.id.ratingBar);
         etComment = findViewById(R.id.etComment);
         btnSubmit = findViewById(R.id.btnSubmitRating);
-        btnBackRating = findViewById(R.id.btnBackRating);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -59,8 +57,6 @@ public class RatingActivity extends AppCompatActivity {
         }
 
         studentId = mAuth.getCurrentUser().getUid();
-
-        btnBackRating.setOnClickListener(v -> finish());
 
         loadExistingFeedback();
 
@@ -182,5 +178,10 @@ public class RatingActivity extends AppCompatActivity {
 
             return null;
         });
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

@@ -31,6 +31,7 @@ public class SearchTutorsActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Find a Tutor");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         searchView = findViewById(R.id.searchView);
@@ -116,5 +117,10 @@ public class SearchTutorsActivity extends AppCompatActivity {
         }
 
         adapter.notifyDataSetChanged();
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
