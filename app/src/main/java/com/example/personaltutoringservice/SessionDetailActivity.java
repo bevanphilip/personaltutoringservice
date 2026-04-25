@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +34,7 @@ public class SessionDetailActivity extends AppCompatActivity {
     TextView tvDetails, tvTitle;
     LinearLayout chatContainer;
     EditText etMessage;
-    Button btnSend, btnFeedback, btnBack;
+    Button btnSend, btnFeedback, btnBack, btnCompleteSession;
     ScrollView scrollChat;
 
     FirebaseFirestore db;
@@ -43,6 +44,9 @@ public class SessionDetailActivity extends AppCompatActivity {
     String currentUserId;
     String studentName = "Student";
     String tutorName = "Tutor";
+    String status;
+
+    boolean readOnly = false;
 
     Timestamp sessionTimestamp;
 
@@ -60,6 +64,7 @@ public class SessionDetailActivity extends AppCompatActivity {
 
         bookingId = getIntent().getStringExtra("bookingId");
         chatId = getIntent().getStringExtra("chatId");
+        readOnly = getIntent().getBooleanExtra("readOnly", false);
 
         if (mAuth.getCurrentUser() == null) {
             finish();
@@ -75,14 +80,15 @@ public class SessionDetailActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         btnFeedback = findViewById(R.id.btnFeedback);
         btnBack = findViewById(R.id.btnBack);
+        btnCompleteSession = findViewById(R.id.btnCompleteSession);
         scrollChat = findViewById(R.id.scrollChat);
 
         btnBack.setOnClickListener(v -> finish());
-
-        loadSessionDetails();
-
         btnSend.setOnClickListener(v -> sendMessage());
         btnFeedback.setOnClickListener(v -> handleFeedback());
+        btnCompleteSession.setOnClickListener(v -> completeSession());
+
+        loadSessionDetails();
     }
 
     private void loadSessionDetails() {
@@ -108,11 +114,10 @@ public class SessionDetailActivity extends AppCompatActivity {
                     String time = doc.getString("time");
                     String comment = doc.getString("comment");
                     String location = doc.getString("location");
-                    String status = doc.getString("status");
+                    status = doc.getString("status");
 
                     tutorId = doc.getString("tutorId");
                     studentId = doc.getString("studentId");
-
                     sessionTimestamp = doc.getTimestamp("sessionTimestamp");
 
                     tvDetails.setText(
@@ -125,7 +130,7 @@ public class SessionDetailActivity extends AppCompatActivity {
 
                     loadUserNames();
                     loadMessages();
-                    setupFeedbackButton();
+                    configurePageMode();
                     markChatAsRead();
                 });
     }
@@ -156,17 +161,49 @@ public class SessionDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setupFeedbackButton() {
-        if (currentUserId.equals(studentId)) {
-            btnFeedback.setText("Leave Feedback");
-        } else if (currentUserId.equals(tutorId)) {
+    private void configurePageMode() {
+        if (readOnly || "completed".equals(status)) {
+            etMessage.setEnabled(false);
+            btnSend.setEnabled(false);
+            btnSend.setText("Archived");
+            btnCompleteSession.setVisibility(View.GONE);
+            btnFeedback.setText("View Feedback");
+            return;
+        }
+
+        if (currentUserId.equals(tutorId)) {
+            btnCompleteSession.setVisibility(View.VISIBLE);
             btnFeedback.setText("View Received Feedback");
         } else {
-            btnFeedback.setText("Feedback");
+            btnCompleteSession.setVisibility(View.GONE);
+            btnFeedback.setText("Leave Feedback");
         }
     }
 
+    private void completeSession() {
+        if (bookingId == null) return;
+
+        db.collection("Bookings")
+                .document(bookingId)
+                .update(
+                        "status", "completed",
+                        "completedAt", FieldValue.serverTimestamp()
+                )
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(this, "Session completed", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Error completing session", Toast.LENGTH_SHORT).show()
+                );
+    }
+
     private void sendMessage() {
+
+        if (readOnly || "completed".equals(status)) {
+            Toast.makeText(this, "This session is archived", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String text = etMessage.getText().toString().trim();
         if (text.isEmpty()) return;
@@ -288,8 +325,12 @@ public class SessionDetailActivity extends AppCompatActivity {
 
     private void handleFeedback() {
 
-        if (currentUserId.equals(tutorId)) {
-            Toast.makeText(this, "Received feedback page coming next", Toast.LENGTH_SHORT).show();
+        if (currentUserId.equals(tutorId) || readOnly || "completed".equals(status)) {
+            Intent intent = new Intent(this, SessionFeedbackActivity.class);
+            intent.putExtra("bookingId", bookingId);
+            intent.putExtra("studentId", studentId);
+            intent.putExtra("tutorId", tutorId);
+            startActivity(intent);
             return;
         }
 
@@ -323,6 +364,8 @@ public class SessionDetailActivity extends AppCompatActivity {
     }
 
     private void markChatAsRead() {
+        if (chatId == null || currentUserId == null) return;
+
         db.collection("Chats")
                 .document(chatId)
                 .update("unreadFor", FieldValue.arrayRemove(currentUserId));

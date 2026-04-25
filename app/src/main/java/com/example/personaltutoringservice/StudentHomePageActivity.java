@@ -43,9 +43,11 @@ public class StudentHomePageActivity extends AppCompatActivity {
         tvQuickName = findViewById(R.id.tvQuickName);
         tvQuickInterests = findViewById(R.id.tvQuickInterests);
         layoutMyRequests = findViewById(R.id.layoutMyRequests);
+
         TextView profile = findViewById(R.id.linkMyProfile);
         Button findTutor = findViewById(R.id.buttonFindTutor);
         Button btnLogout = findViewById(R.id.btnLogout);
+        Button btnStudentHistory = findViewById(R.id.btnStudentHistory);
 
         welcomeText.setText("Welcome, User");
 
@@ -60,6 +62,12 @@ public class StudentHomePageActivity extends AppCompatActivity {
         findTutor.setOnClickListener(v ->
                 startActivity(new Intent(this, SearchTutorsActivity.class))
         );
+
+        btnStudentHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SessionHistoryActivity.class);
+            intent.putExtra("userType", "student");
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
@@ -123,12 +131,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
 
                     layoutMyRequests.removeAllViews();
 
-                    if (query.isEmpty()) {
-                        TextView tv = new TextView(this);
-                        tv.setText("No requests yet");
-                        layoutMyRequests.addView(tv);
-                        return;
-                    }
+                    boolean hasVisibleRequest = false;
 
                     for (DocumentSnapshot doc : query.getDocuments()) {
 
@@ -137,15 +140,24 @@ public class StudentHomePageActivity extends AppCompatActivity {
                         String time = doc.getString("time");
                         String chatId = doc.getString("chatId");
 
+                        if ("completed".equals(status) || "denied".equals(status)) {
+                            continue;
+                        }
+
+                        hasVisibleRequest = true;
+
                         TextView tv = new TextView(this);
 
-                        tv.setText("Date: " + date + " | Time: " + time +
-                                "\nStatus: " + status);
+                        tv.setText("Date: " + safeText(date) + " | Time: " + safeText(time) +
+                                "\nStatus: " + safeText(status));
 
-                        // 🔥 THIS IS WHERE CHAT OPENS
+                        if ("pending".equals(status)) {
+                            tv.setText(tv.getText() + "\nWaiting for tutor approval");
+                        }
+
                         if ("approved".equals(status) && chatId != null) {
 
-                            tv.setText(tv.getText() + "\nTap to chat");
+                            tv.setText(tv.getText() + "\nTap to view session");
 
                             db.collection("Chats")
                                     .document(chatId)
@@ -169,8 +181,21 @@ public class StudentHomePageActivity extends AppCompatActivity {
                             });
                         }
 
+                        tv.setTextSize(15f);
+                        tv.setPadding(0, 12, 0, 12);
+
+                        layoutMyRequests.addView(tv);
+                    }
+
+                    if (!hasVisibleRequest) {
+                        TextView tv = new TextView(this);
+                        tv.setText("No active requests yet");
                         layoutMyRequests.addView(tv);
                     }
                 });
+    }
+
+    private String safeText(String value) {
+        return value == null || value.trim().isEmpty() ? "Not set" : value;
     }
 }

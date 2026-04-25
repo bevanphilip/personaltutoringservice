@@ -1,180 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="#F5F5F5">
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, User"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#666666"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/linkMyProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Profile"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#0000EE"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="6dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:background="#EAEAEA"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp">
 
-        <!-- Welcome -->
         <TextView
-            android:id="@+id/textWelcome"
+            android:id="@+id/tvQuickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome, User"
-            android:textSize="30sp"
+            android:text="Name: Not set"
+            android:textSize="15sp"
+            android:textColor="#666666" />
+
+        <TextView
+            android:id="@+id/tvQuickInterests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interests: Not set"
+            android:textSize="15sp"
+            android:textColor="#666666" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Featured Tutors"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#0000EE"
+        android:layout_marginBottom="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#EAEAEA"
+        android:padding="10dp"
+        android:layout_marginBottom="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sarah M. - Math Tutor"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#666666"
-            android:layout_marginBottom="6dp" />
+            android:textColor="#666666" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Find tutors, manage your profile, and explore featured help."
-            android:textSize="14sp"
-            android:textColor="#777777"
-            android:layout_marginBottom="20dp" />
+            android:text="Rating: 4.9"
+            android:textSize="13sp"
+            android:textColor="#777777" />
+    </LinearLayout>
 
-        <!-- My Profile -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#EAEAEA"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp">
+
         <TextView
-            android:id="@+id/linkMyProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Profile"
-            android:textSize="22sp"
+            android:text="Daniel R. - Programming Tutor"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#0000EE"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginBottom="8dp" />
+            android:textColor="#666666" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#EAEAEA"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:id="@+id/tvQuickName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name: Not set"
-                android:textSize="16sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/tvQuickInterests"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Interests: Not set"
-                android:textSize="16sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Complete your profile to help us find the right tutor."
-                android:textSize="13sp"
-                android:textColor="#777777" />
-        </LinearLayout>
-
-        <!-- Featured Tutors -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Featured Tutors"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#0000EE"
-            android:layout_marginBottom="8dp" />
+            android:text="Rating: 4.8"
+            android:textSize="13sp"
+            android:textColor="#777777" />
+    </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#EAEAEA"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Requests"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#0000EE"
+        android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sarah M. - Math Tutor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#666666" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating: 4.9"
-                android:textSize="14sp"
-                android:textColor="#777777" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#EAEAEA"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daniel R. - Programming Tutor"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#666666" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating: 4.8"
-                android:textSize="14sp"
-                android:textColor="#777777" />
-        </LinearLayout>
-
-        <!-- My Tutors -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Requests"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#0000EE"
-            android:layout_marginBottom="4dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:padding="8dp">
 
         <LinearLayout
             android:id="@+id/layoutMyRequests"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+    </ScrollView>
 
-        <Button
-            android:id="@+id/buttonFindTutor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Find a Tutor"
-            android:textAllCaps="false"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#6A00F4"
-            android:layout_marginBottom="20dp" />
+    <Button
+        android:id="@+id/btnStudentHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My History"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#6A00F4"
+        android:layout_marginTop="8dp" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textAllCaps="false"
-            android:textSize="22sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#D32F2F" />
+    <Button
+        android:id="@+id/buttonFindTutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Find a Tutor"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#6A00F4"
+        android:layout_marginTop="6dp" />
 
-    </LinearLayout>
-</ScrollView>
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#D32F2F"
+        android:layout_marginTop="6dp" />
+
+</LinearLayout>

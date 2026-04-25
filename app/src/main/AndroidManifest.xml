@@ -16,6 +16,12 @@
         android:theme="@style/Theme.PersonalTutoringService"
         tools:targetApi="31">
         <activity
+            android:name=".SessionFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SessionHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".SessionDetailActivity"
             android:exported="false" />
         <activity

@@ -109,5 +109,16 @@
             android:backgroundTint="#6A00F4"
             android:textColor="#FFFFFF" />
 
+        <Button
+            android:id="@+id/btnCompleteSession"
+            android:text="Complete Session"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#388E3C"
+            android:textColor="#FFFFFF" />
+
     </LinearLayout>
 </ScrollView>

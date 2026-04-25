@@ -47,6 +47,7 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         TextView profile = findViewById(R.id.linkMyProfile);
         TextView sessions = findViewById(R.id.linkSessions);
+        Button btnTutorHistory = findViewById(R.id.btnTutorHistory);
         //Button advertiseBtn = findViewById(R.id.buttonAdvertiseServices);
         Button btnLogout = findViewById(R.id.btnLogout);
 
@@ -76,6 +77,12 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         sessions.setOnClickListener(v -> {
             Intent intent = new Intent(TutorHomePageActivity.this, TutorSessionsActivity.class);
+            startActivity(intent);
+        });
+
+        btnTutorHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SessionHistoryActivity.class);
+            intent.putExtra("userType", "tutor");
             startActivity(intent);
         });
 
@@ -140,6 +147,7 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
         db.collection("Bookings")
                 .whereEqualTo("tutorId", currentUser.getUid())
+                .whereEqualTo("status", "approved")
                 .get()
                 .addOnSuccessListener(query -> {
 
@@ -147,7 +155,7 @@ public class TutorHomePageActivity extends AppCompatActivity {
 
                     if (query.isEmpty()) {
                         TextView tv = new TextView(this);
-                        tv.setText("No sessions yet");
+                        tv.setText("No active sessions yet");
                         tv.setTextSize(15f);
                         tv.setTextColor(0xFF666666);
                         layoutTutorSessions.addView(tv);
@@ -168,9 +176,9 @@ public class TutorHomePageActivity extends AppCompatActivity {
                                 "\nStatus: " + safeText(status) +
                                 "\nComment: " + safeText(comment));
 
-                        if ("approved".equals(status) && chatId != null) {
+                        if (chatId != null) {
 
-                            tv.setText(tv.getText() + "\nTap to chat");
+                            tv.setText(tv.getText() + "\nTap to view session");
 
                             db.collection("Chats")
                                     .document(chatId)
