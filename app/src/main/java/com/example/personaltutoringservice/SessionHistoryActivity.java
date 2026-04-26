@@ -115,11 +115,13 @@ public class SessionHistoryActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(24, 24, 24, 24);
 
+        boolean isPaid = paymentStatus != null && paymentStatus.trim().equalsIgnoreCase("Paid");
+
         TextView tv = new TextView(this);
         tv.setText("Date: " + safeText(date) +
                 "\nTime: " + safeText(time) +
-                "\nStatus: " + safeText(status) +
-                "\nPayment Status: " + safeText(paymentStatus) +
+                "\nStatus: " + capitalize(status) +
+                "\nPayment Status: " + capitalize(paymentStatus) +
                 "\nTap card to view archived session");
         tv.setTextSize(16f);
         tv.setTextColor(Color.parseColor("#666666"));
@@ -127,27 +129,40 @@ public class SessionHistoryActivity extends AppCompatActivity {
         layout.addView(tv);
 
         if (!"tutor".equals(userType)) {
-            Button btnReceipt = new Button(this);
-            btnReceipt.setText("View Receipt");
-            btnReceipt.setTransformationMethod(null);
-            btnReceipt.setTextSize(18f);
-            btnReceipt.setTextColor(Color.WHITE);
-            btnReceipt.setBackgroundColor(Color.parseColor("#388E3C"));
+            Button btnPaymentOrReceipt = new Button(this);
+            btnPaymentOrReceipt.setTransformationMethod(null);
+            btnPaymentOrReceipt.setTextSize(18f);
+            btnPaymentOrReceipt.setTextColor(Color.WHITE);
+
+            if (isPaid) {
+                btnPaymentOrReceipt.setText("View Receipt");
+                btnPaymentOrReceipt.setBackgroundColor(Color.parseColor("#388E3C"));
+            } else {
+                btnPaymentOrReceipt.setText("Pay Now");
+                btnPaymentOrReceipt.setBackgroundColor(Color.parseColor("#6A00F4"));
+            }
 
             LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             btnParams.setMargins(0, 18, 0, 0);
-            btnReceipt.setLayoutParams(btnParams);
+            btnPaymentOrReceipt.setLayoutParams(btnParams);
 
-            btnReceipt.setOnClickListener(v -> {
-                Intent intent = new Intent(this, ReceiptActivity.class);
+            btnPaymentOrReceipt.setOnClickListener(v -> {
+                Intent intent;
+
+                if (isPaid) {
+                    intent = new Intent(this, ReceiptActivity.class);
+                } else {
+                    intent = new Intent(this, PaymentActivity.class);
+                }
+
                 intent.putExtra("bookingId", bookingId);
                 startActivity(intent);
             });
 
-            layout.addView(btnReceipt);
+            layout.addView(btnPaymentOrReceipt);
         }
 
         card.addView(layout);
@@ -170,6 +185,14 @@ public class SessionHistoryActivity extends AppCompatActivity {
 
     private String safeText(String value) {
         return value == null || value.trim().isEmpty() ? "Not set" : value;
+    }
+
+    private String capitalize(String value) {
+        if (value == null || value.trim().isEmpty()) return "Not set";
+
+        value = value.trim();
+
+        return value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
     }
 
     @Override

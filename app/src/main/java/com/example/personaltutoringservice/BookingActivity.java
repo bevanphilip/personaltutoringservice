@@ -23,6 +23,7 @@ public class BookingActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     String tutorId;
+    String tutorPrice = "Not set";
 
     private int selectedYear;
     private int selectedMonth;
@@ -49,6 +50,7 @@ public class BookingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         tutorId = getIntent().getStringExtra("tutorId");
+        loadTutorPrice();
 
         setupDatePicker();
         setupTimePicker();
@@ -90,7 +92,20 @@ public class BookingActivity extends AppCompatActivity {
                     true).show();
         });
     }
+    private void loadTutorPrice() {
+        if (tutorId == null || tutorId.trim().isEmpty()) return;
 
+        db.collection("Tutors")
+                .document(tutorId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    String price = doc.getString("price");
+
+                    if (price != null && !price.trim().isEmpty()) {
+                        tutorPrice = price;
+                    }
+                });
+    }
     private void saveBooking() {
 
         String date = etDate.getText().toString();
@@ -109,6 +124,7 @@ public class BookingActivity extends AppCompatActivity {
         booking.put("tutorId", tutorId);
         booking.put("date", date);
         booking.put("time", time);
+        booking.put("price", tutorPrice);
         booking.put("sessionTimestamp", getSessionTimestamp());
         booking.put("comment", comment);
         booking.put("status", "pending");

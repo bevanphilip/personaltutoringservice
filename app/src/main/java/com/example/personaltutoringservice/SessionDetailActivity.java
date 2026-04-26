@@ -114,6 +114,7 @@ public class SessionDetailActivity extends AppCompatActivity {
 
                     String date = doc.getString("date");
                     String time = doc.getString("time");
+                    String price = doc.getString("price");
                     String comment = doc.getString("comment");
                     String location = doc.getString("location");
                     status = doc.getString("status");
@@ -130,8 +131,9 @@ public class SessionDetailActivity extends AppCompatActivity {
                             "Date: " + safe(date) +
                                     "\nTime: " + safe(time) +
                                     "\nLocation: " + safe(location) +
-                                    "\nStatus: " + safe(status) +
-                                    "\nPayment Status: " + safe(paymentStatus) +
+                                    "\nPrice: $" + safe(price) + "/hr" +
+                                    "\nStatus: " + capitalize(status) +
+                                    "\nPayment Status: " + capitalize(paymentStatus) +
                                     "\nComment: " + safe(comment)
                     );
 
@@ -141,7 +143,10 @@ public class SessionDetailActivity extends AppCompatActivity {
                     markChatAsRead();
                 });
     }
-
+    private String capitalize(String value) {
+        if (value == null || value.trim().isEmpty()) return "Not set";
+        return value.substring(0, 1).toUpperCase() + value.substring(1);
+    }
     private void loadUserNames() {
         if (studentId != null) {
             db.collection("Students")
@@ -191,7 +196,7 @@ public class SessionDetailActivity extends AppCompatActivity {
             btnFeedback.setText("View Received Feedback");
             btnPayment.setVisibility(View.GONE);
 
-            if ("Paid".equals(paymentStatus)) {
+            if (paymentStatus != null && paymentStatus.trim().equalsIgnoreCase("Paid")) {
                 btnCompleteSession.setEnabled(true);
                 btnCompleteSession.setText("Complete Session");
             } else {
@@ -215,7 +220,7 @@ public class SessionDetailActivity extends AppCompatActivity {
     private void completeSession() {
         if (bookingId == null) return;
 
-        if (!"Paid".equals(paymentStatus)) {
+        if (paymentStatus == null || !paymentStatus.trim().equalsIgnoreCase("Paid")) {
             Toast.makeText(this, "Student payment must be completed before closing this session.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -239,7 +244,7 @@ public class SessionDetailActivity extends AppCompatActivity {
 
         Intent intent;
 
-        if ("Paid".equals(paymentStatus)) {
+        if (paymentStatus != null && paymentStatus.trim().equalsIgnoreCase("Paid")) {
             intent = new Intent(this, ReceiptActivity.class);
         } else {
             intent = new Intent(this, PaymentActivity.class);
