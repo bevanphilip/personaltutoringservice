@@ -6,15 +6,17 @@
     android:padding="24dp"
     android:gravity="center">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
+    <!-- 🔥 BIGGER LOGO -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/logo"
+        android:contentDescription="App Logo"
+        android:scaleType="fitCenter" />
 
+    <!-- EMAIL -->
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="260dp"
@@ -25,6 +27,7 @@
         android:autofillHints="username"
         android:layout_marginBottom="16dp" />
 
+    <!-- PASSWORD -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="260dp"
@@ -35,27 +38,27 @@
         android:autofillHints="password"
         android:layout_marginBottom="20dp" />
 
+    <!-- LOGIN -->
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/login_button"
         android:layout_marginBottom="12dp" />
 
+    <!-- REGISTER -->
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/register_button"
         android:layout_marginBottom="12dp" />
 
+    <!-- FORGOT -->
     <Button
         android:id="@+id/btnForgot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/forgot_button" />
 
 </LinearLayout>

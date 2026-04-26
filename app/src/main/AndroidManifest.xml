@@ -16,6 +16,15 @@
         android:theme="@style/Theme.PersonalTutoringService"
         tools:targetApi="31">
         <activity
+            android:name=".SessionFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SessionHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SessionDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".BookingActivity"
             android:exported="false" />
         <activity
@@ -43,7 +52,20 @@
             android:name=".StudentHomePageActivity"
             android:exported="false" />
         <activity
-            android:name="ProfileActivity"
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReceiptActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

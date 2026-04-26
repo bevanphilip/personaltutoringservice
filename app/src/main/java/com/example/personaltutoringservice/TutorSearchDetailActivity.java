@@ -129,10 +129,15 @@ public class TutorSearchDetailActivity extends AppCompatActivity {
 
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         String feedback = doc.getString("feedback");
-                        Long ratingLong = doc.getLong("rating");
-                        Timestamp timestamp = doc.getTimestamp("timestamp");
 
-                        int rating = ratingLong != null ? ratingLong.intValue() : 0;
+                        if (feedback == null || feedback.trim().isEmpty()) {
+                            feedback = doc.getString("comment");
+                        }
+
+                        Double ratingDouble = doc.getDouble("rating");
+                        double rating = ratingDouble != null ? ratingDouble : 0.0;
+
+                        Timestamp timestamp = doc.getTimestamp("timestamp");
                         String dateText = formatTimestamp(timestamp);
 
                         CardView feedbackCard = createFeedbackCard(dateText, rating, safeText(feedback));
@@ -144,7 +149,7 @@ public class TutorSearchDetailActivity extends AppCompatActivity {
                 );
     }
 
-    private CardView createFeedbackCard(String dateText, int rating, String feedbackText) {
+    private CardView createFeedbackCard(String dateText, double rating, String feedbackText) {
         CardView cardView = new CardView(this);
 
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
@@ -167,7 +172,7 @@ public class TutorSearchDetailActivity extends AppCompatActivity {
         tvDate.setTextColor(0xFF666666);
 
         TextView tvRating = new TextView(this);
-        tvRating.setText("Rating: " + rating + "/5");
+        tvRating.setText("Rating: " + String.format(Locale.getDefault(), "%.1f", rating) + "/5");
         tvRating.setTextSize(16f);
         tvRating.setTextColor(0xFF666666);
         tvRating.setPadding(0, 12, 0, 12);

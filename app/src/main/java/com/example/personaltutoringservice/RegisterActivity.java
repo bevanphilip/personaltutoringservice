@@ -21,7 +21,7 @@ public class RegisterActivity extends AppCompatActivity
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     EditText username, password, email, phone, address;
-    Button btnDone, btnBack;
+    Button btnDone;
     RadioGroup roleGroup, location;
     LinearLayout studentFields, tutorFields;
     EditText etInterests, etSkills, etHours, etPrice;
@@ -44,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity
         address = findViewById(R.id.address);
         //Button Definitions
         btnDone = findViewById(R.id.btnDone);
-        btnBack = findViewById(R.id.btnBack);
         // Student vs Tutor fields
         etInterests = findViewById(R.id.etInterests);
         etSkills = findViewById(R.id.etSkills);
@@ -64,9 +63,7 @@ public class RegisterActivity extends AppCompatActivity
         // Finish registration
         btnDone.setOnClickListener(v -> validateAndRegister());
 
-        // Back button
-        btnBack.setOnClickListener(v -> finish());
-    }
+        }
 
     private void updateRoleFields(int checkedId) {
         if (checkedId == R.id.rbStudent) {
@@ -201,5 +198,10 @@ public class RegisterActivity extends AppCompatActivity
                 .setMessage(message)
                 .setPositiveButton("OK", null)
                 .show();
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
