@@ -1,7 +1,9 @@
 package com.example.personaltutoringservice;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,12 @@ public class SessionHistoryActivity extends AppCompatActivity {
         loadHistory();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadHistory();
+    }
+
     private void loadHistory() {
         if (mAuth.getCurrentUser() == null) return;
 
@@ -64,6 +72,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
                         TextView tv = new TextView(this);
                         tv.setText("No completed sessions yet");
                         tv.setTextSize(16f);
+                        tv.setTextColor(Color.parseColor("#666666"));
                         tv.setPadding(12, 12, 12, 12);
                         layoutHistory.addView(tv);
                         return;
@@ -75,8 +84,17 @@ public class SessionHistoryActivity extends AppCompatActivity {
                         String time = doc.getString("time");
                         String status = doc.getString("status");
                         String chatId = doc.getString("chatId");
+                        String paymentStatus = doc.getString("paymentStatus");
 
-                        CardView card = createHistoryCard(bookingId, chatId, date, time, status);
+                        CardView card = createHistoryCard(
+                                bookingId,
+                                chatId,
+                                date,
+                                time,
+                                status,
+                                paymentStatus
+                        );
+
                         layoutHistory.addView(card);
                     }
                 })
@@ -85,7 +103,9 @@ public class SessionHistoryActivity extends AppCompatActivity {
                 );
     }
 
-    private CardView createHistoryCard(String bookingId, String chatId, String date, String time, String status) {
+    private CardView createHistoryCard(String bookingId, String chatId, String date,
+                                       String time, String status, String paymentStatus) {
+
         CardView card = new CardView(this);
         card.setRadius(12f);
         card.setCardElevation(6f);
@@ -99,13 +119,45 @@ public class SessionHistoryActivity extends AppCompatActivity {
         tv.setText("Date: " + safeText(date) +
                 "\nTime: " + safeText(time) +
                 "\nStatus: " + safeText(status) +
-                "\nTap to view session history");
+                "\nPayment Status: " + safeText(paymentStatus) +
+                "\nTap card to view archived session");
         tv.setTextSize(16f);
+        tv.setTextColor(Color.parseColor("#666666"));
 
         layout.addView(tv);
+
+        if (!"tutor".equals(userType)) {
+            Button btnReceipt = new Button(this);
+            btnReceipt.setText("View Receipt");
+            btnReceipt.setTransformationMethod(null);
+            btnReceipt.setTextSize(18f);
+            btnReceipt.setTextColor(Color.WHITE);
+            btnReceipt.setBackgroundColor(Color.parseColor("#388E3C"));
+
+            LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            btnParams.setMargins(0, 18, 0, 0);
+            btnReceipt.setLayoutParams(btnParams);
+
+            btnReceipt.setOnClickListener(v -> {
+                Intent intent = new Intent(this, ReceiptActivity.class);
+                intent.putExtra("bookingId", bookingId);
+                startActivity(intent);
+            });
+
+            layout.addView(btnReceipt);
+        }
+
         card.addView(layout);
 
         card.setOnClickListener(v -> {
+            if (chatId == null || chatId.trim().isEmpty()) {
+                Toast.makeText(this, "No chat found for this session", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(this, SessionDetailActivity.class);
             intent.putExtra("bookingId", bookingId);
             intent.putExtra("chatId", chatId);
@@ -119,6 +171,7 @@ public class SessionHistoryActivity extends AppCompatActivity {
     private String safeText(String value) {
         return value == null || value.trim().isEmpty() ? "Not set" : value;
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();

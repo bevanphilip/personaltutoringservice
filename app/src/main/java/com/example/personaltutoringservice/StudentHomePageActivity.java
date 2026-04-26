@@ -3,9 +3,12 @@ package com.example.personaltutoringservice;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +17,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class StudentHomePageActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
+
     private TextView welcomeText;
     private TextView tvQuickName;
     private TextView tvQuickInterests;
     private LinearLayout layoutMyRequests;
+
+    private ViewFlipper featuredTutorFlipper;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -43,6 +50,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
         tvQuickName = findViewById(R.id.tvQuickName);
         tvQuickInterests = findViewById(R.id.tvQuickInterests);
         layoutMyRequests = findViewById(R.id.layoutMyRequests);
+        featuredTutorFlipper = findViewById(R.id.featuredTutorFlipper);
 
         TextView profile = findViewById(R.id.linkMyProfile);
         Button findTutor = findViewById(R.id.buttonFindTutor);
@@ -52,6 +60,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
         welcomeText.setText("Welcome, User");
 
         loadStudentQuickProfile();
+        loadTopTutors();
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(this, ProfileActivity.class);
@@ -90,6 +99,7 @@ public class StudentHomePageActivity extends AppCompatActivity {
         super.onResume();
         loadStudentQuickProfile();
         loadStudentBookings();
+        loadTopTutors();
     }
 
     private void loadStudentQuickProfile() {
@@ -116,6 +126,80 @@ public class StudentHomePageActivity extends AppCompatActivity {
                         welcomeText.setText("Welcome, " + username);
                         tvQuickName.setText("Name: " + username);
                         tvQuickInterests.setText("Interests: " + interests);
+                    }
+                });
+    }
+
+    private void loadTopTutors() {
+        db.collection("Tutors")
+                .orderBy("ratingAverage", Query.Direction.DESCENDING)
+                .limit(5)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    featuredTutorFlipper.removeAllViews();
+
+                    LayoutInflater inflater = LayoutInflater.from(this);
+
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+
+                        String username = doc.getString("username");
+                        String skills = doc.getString("skills");
+                        String location = doc.getString("location");
+
+                        Double ratingAverage = doc.getDouble("ratingAverage");
+                        Long ratingCount = doc.getLong("ratingCount");
+
+                        Object priceObject = doc.get("price");
+                        String price = priceObject != null ? priceObject.toString() : null;
+
+                        View cardView = inflater.inflate(
+                                R.layout.item_featured_tutor,
+                                featuredTutorFlipper,
+                                false
+                        );
+
+                        TextView tvName = cardView.findViewById(R.id.tvFeaturedName);
+                        TextView tvSubject = cardView.findViewById(R.id.tvFeaturedSubject);
+                        TextView tvRating = cardView.findViewById(R.id.tvFeaturedRating);
+                        TextView tvPrice = cardView.findViewById(R.id.tvFeaturedPrice);
+
+                        tvName.setText(safeText(username));
+                        tvSubject.setText("Skills: " + safeText(skills));
+
+                        if (ratingAverage != null && ratingCount != null && ratingCount > 0) {
+                            tvRating.setText("⭐ " + String.format("%.1f", ratingAverage)
+                                    + " (" + ratingCount + " ratings)");
+                        } else {
+                            tvRating.setText("⭐ No rating yet");
+                        }
+
+                        if (price != null && !price.trim().isEmpty()) {
+                            tvPrice.setText("$" + price + "/hr");
+                        } else {
+                            tvPrice.setText("$--/hr");
+                        }
+
+                        cardView.setOnClickListener(v -> {
+                            Intent intent = new Intent(this, TutorSearchDetailActivity.class);
+                            intent.putExtra("tutorId", doc.getId());
+                            startActivity(intent);
+                        });
+
+                        featuredTutorFlipper.addView(cardView);
+                    }
+
+                    if (featuredTutorFlipper.getChildCount() == 0) {
+                        TextView tv = new TextView(this);
+                        tv.setText("No featured tutors yet");
+                        tv.setTextSize(15f);
+                        tv.setPadding(16, 16, 16, 16);
+                        featuredTutorFlipper.addView(tv);
+                    }
+
+                    if (featuredTutorFlipper.getChildCount() > 1) {
+                        featuredTutorFlipper.setFlipInterval(3000);
+                        featuredTutorFlipper.startFlipping();
                     }
                 });
     }

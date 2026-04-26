@@ -112,6 +112,8 @@ public class BookingActivity extends AppCompatActivity {
         booking.put("sessionTimestamp", getSessionTimestamp());
         booking.put("comment", comment);
         booking.put("status", "pending");
+        booking.put("paymentStatus", "Not Ready");
+        booking.put("paymentTimestamp", null);
         booking.put("timestamp", FieldValue.serverTimestamp());
 
         db.collection("Bookings")

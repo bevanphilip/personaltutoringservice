@@ -28,6 +28,7 @@
         android:focusable="true"
         android:layout_marginBottom="6dp" />
 
+    <!-- QUICK PROFILE -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
             android:textColor="#666666" />
     </LinearLayout>
 
+    <!-- FEATURED TUTORS TITLE -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,56 +62,18 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#0000EE"
-        android:layout_marginBottom="4dp" />
+        android:layout_marginBottom="6dp" />
 
-    <LinearLayout
+    <!-- 🔥 NEW CAROUSEL (REPLACES STATIC CARDS) -->
+    <ViewFlipper
+        android:id="@+id/featuredTutorFlipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#EAEAEA"
         android:padding="10dp"
-        android:layout_marginBottom="6dp">
+        android:layout_marginBottom="10dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sarah M. - Math Tutor"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="#666666" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rating: 4.9"
-            android:textSize="13sp"
-            android:textColor="#777777" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#EAEAEA"
-        android:padding="10dp"
-        android:layout_marginBottom="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Daniel R. - Programming Tutor"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="#666666" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rating: 4.8"
-            android:textSize="13sp"
-            android:textColor="#777777" />
-    </LinearLayout>
-
+    <!-- MY REQUESTS -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,7 +95,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </ScrollView>
 
     <Button

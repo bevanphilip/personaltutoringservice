@@ -34,7 +34,8 @@ public class SessionDetailActivity extends AppCompatActivity {
     TextView tvDetails, tvTitle;
     LinearLayout chatContainer;
     EditText etMessage;
-    Button btnSend, btnFeedback, btnCompleteSession;
+    Button btnSend, btnFeedback, btnCompleteSession, btnPayment;
+    String paymentStatus = "Unpaid";
     ScrollView scrollChat;
 
     FirebaseFirestore db;
@@ -81,6 +82,8 @@ public class SessionDetailActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         btnFeedback = findViewById(R.id.btnFeedback);
         btnCompleteSession = findViewById(R.id.btnCompleteSession);
+        btnPayment = findViewById(R.id.btnPayment);
+        btnPayment.setOnClickListener(v -> openPaymentOrReceipt());
         scrollChat = findViewById(R.id.scrollChat);
 
         btnSend.setOnClickListener(v -> sendMessage());
@@ -114,6 +117,10 @@ public class SessionDetailActivity extends AppCompatActivity {
                     String comment = doc.getString("comment");
                     String location = doc.getString("location");
                     status = doc.getString("status");
+                    paymentStatus = doc.getString("paymentStatus");
+                    if (paymentStatus == null || paymentStatus.trim().isEmpty()) {
+                        paymentStatus = "Unpaid";
+                    }
 
                     tutorId = doc.getString("tutorId");
                     studentId = doc.getString("studentId");
@@ -124,6 +131,7 @@ public class SessionDetailActivity extends AppCompatActivity {
                                     "\nTime: " + safe(time) +
                                     "\nLocation: " + safe(location) +
                                     "\nStatus: " + safe(status) +
+                                    "\nPayment Status: " + safe(paymentStatus) +
                                     "\nComment: " + safe(comment)
                     );
 
@@ -167,20 +175,50 @@ public class SessionDetailActivity extends AppCompatActivity {
             btnSend.setText("Archived");
             btnCompleteSession.setVisibility(View.GONE);
             btnFeedback.setText("View Feedback");
+
+            if (currentUserId.equals(studentId)) {
+                btnPayment.setVisibility(View.VISIBLE);
+                btnPayment.setText("View Receipt");
+            } else {
+                btnPayment.setVisibility(View.GONE);
+            }
+
             return;
         }
 
         if (currentUserId.equals(tutorId)) {
             btnCompleteSession.setVisibility(View.VISIBLE);
             btnFeedback.setText("View Received Feedback");
+            btnPayment.setVisibility(View.GONE);
+
+            if ("Paid".equals(paymentStatus)) {
+                btnCompleteSession.setEnabled(true);
+                btnCompleteSession.setText("Complete Session");
+            } else {
+                btnCompleteSession.setEnabled(true);
+                btnCompleteSession.setText("Complete Session");
+            }
+
         } else {
             btnCompleteSession.setVisibility(View.GONE);
             btnFeedback.setText("Leave Feedback");
+            btnPayment.setVisibility(View.VISIBLE);
+
+            if ("Paid".equals(paymentStatus)) {
+                btnPayment.setText("View Receipt");
+            } else {
+                btnPayment.setText("Pay Now");
+            }
         }
     }
 
     private void completeSession() {
         if (bookingId == null) return;
+
+        if (!"Paid".equals(paymentStatus)) {
+            Toast.makeText(this, "Student payment must be completed before closing this session.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         db.collection("Bookings")
                 .document(bookingId)
@@ -196,7 +234,20 @@ public class SessionDetailActivity extends AppCompatActivity {
                         Toast.makeText(this, "Error completing session", Toast.LENGTH_SHORT).show()
                 );
     }
+    private void openPaymentOrReceipt() {
+        if (bookingId == null) return;
 
+        Intent intent;
+
+        if ("Paid".equals(paymentStatus)) {
+            intent = new Intent(this, ReceiptActivity.class);
+        } else {
+            intent = new Intent(this, PaymentActivity.class);
+        }
+
+        intent.putExtra("bookingId", bookingId);
+        startActivity(intent);
+    }
     private void sendMessage() {
 
         if (readOnly || "completed".equals(status)) {
@@ -415,5 +466,12 @@ public class SessionDetailActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (bookingId != null && chatId != null) {
+            loadSessionDetails();
+        }
     }
 }

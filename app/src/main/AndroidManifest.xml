@@ -61,6 +61,13 @@
             android:name=".RatingActivity"
             android:exported="false" />
         <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ReceiptActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
