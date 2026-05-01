@@ -140,7 +140,6 @@ public class TutorSessionsActivity extends AppCompatActivity {
             calendar.add(Calendar.DAY_OF_YEAR, 14);
             Timestamp expireAt = new Timestamp(calendar.getTime());
 
-            // Step 1: Create chat
             Map<String, Object> chat = new HashMap<>();
             chat.put("studentId", studentId);
             chat.put("tutorId", tutorId);
@@ -154,7 +153,6 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
                         String chatId = chatRef.getId();
 
-                        // Step 2: Update booking
                         db.collection("Bookings")
                                 .document(bookingId)
                                 .update(
@@ -166,7 +164,6 @@ public class TutorSessionsActivity extends AppCompatActivity {
 
                                     Toast.makeText(this, "Booking approved", Toast.LENGTH_SHORT).show();
 
-                                    // Step 3: Open session details page
                                     Intent intent = new Intent(this, SessionDetailActivity.class);
                                     intent.putExtra("chatId", chatId);
                                     intent.putExtra("bookingId", bookingId);
