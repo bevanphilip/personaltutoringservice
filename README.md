@@ -89,6 +89,6 @@ Build the project:
 ./gradlew build
 ```
 Run project:
-Select emulator or top of Android Studio and hit play button.
+Select emulator on top of Android Studio and hit play button.
 ```
 Built with using Android Studio and Firebase.
